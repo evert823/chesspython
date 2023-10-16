@@ -1,0 +1,32 @@
+pa5-a6|pa5xb6 e.p.|pd3-d4|pd3xc4|pg2-g3|Hg4-g5|Hg4-h4|Hg4-h3|Hg4-g3|Hg4-f3|Hg4-f4|Hg4-f5|Hg4xf2|Hg4xe3|Lg6-g7|Lg6-g8|Lg6-h6|Lg6-g5|Lg6-f6|Lg6xh5
+
+p (0, 4, 0, 5) 
+p (0, 4, 1, 5) e.p. capture other coordinates (1, 4, -1, -1)
+p (3, 2, 3, 3) 
+p (3, 2, 2, 3) capture 
+p (6, 1, 6, 2) 
+H (6, 3, 6, 4) 
+H (6, 3, 7, 3) 
+H (6, 3, 7, 2) 
+H (6, 3, 6, 2) 
+H (6, 3, 5, 2) 
+H (6, 3, 5, 3) 
+H (6, 3, 5, 4) 
+H (6, 3, 5, 1) capture 
+H (6, 3, 4, 2) capture 
+L (6, 5, 6, 6) 
+L (6, 5, 6, 7) 
+L (6, 5, 7, 5) 
+L (6, 5, 6, 4) 
+L (6, 5, 5, 5) 
+L (6, 5, 7, 4) capture 
+
+.XXX....
+X...X...
+XX.XXX.X
+X.X.X.X.
+XXXX.XX.
+.X.X....
+...X.X..
+..X.X.X.
+

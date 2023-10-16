@@ -1,0 +1,21 @@
+{
+    "boardwidth": 8,
+    "boardheight": 8,
+    "colourtomove": 1,
+    "castlinginfo": {"whitekinghasmoved": false,
+                     "whitekingsiderookhasmoved": false,
+                     "whitequeensiderookhasmoved": false,
+                     "blackkinghasmoved": true,
+                     "blackkingsiderookhasmoved": true,
+                     "blackqueensiderookhasmoved": true},
+    "squares": [
+        " .| .| .| .| .| .| .| .",
+        " .| .| .| .| .| .| .| .",
+        " .| .| .| .| .| .| .| .",
+        " .| .| .| .| .| .| .| .",
+        " .| .| .| .| .| .| .| .",
+        " .| .| .| .| .| .| .| .",
+        " .| .| .| .| .| .| .| .",
+        " .| .| .| .| .| .| R| K"
+    ]
+}

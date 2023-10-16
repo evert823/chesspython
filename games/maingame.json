@@ -1,0 +1,5 @@
+{
+    "boardwidth": 8,
+    "boardheight": 8,
+    "piecetypes": ["Amazon", "Bishop", "Guard", "Hunter", "King", "Knight", "LongPawn", "Pawn", "Queen", "Rook"]
+}
