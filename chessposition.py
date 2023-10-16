@@ -37,7 +37,7 @@ class chessposition:
             for j in range(self.boardheight):
                 self.IsAttacked[j][i] = False
 #---------------------------------------------------------------------------------------------------------
-    def LoadFromJsonFile(self, pfilename, pPieceTypeIndex):
+    def LoadFromJsonFile(self, pfilename, ppiecetypes):
         #Load from json file and convert to class structure
         positionfile = open(pfilename, 'r')
         positiondict = json.load(positionfile)
@@ -73,9 +73,9 @@ class chessposition:
             mysymbol = positiondict["squares"][rj].split("|")
             for i in range(self.boardwidth):
                 s = mysymbol[i].lstrip()
-                self.squares[j][i] = self.Str2PieceType(s, pPieceTypeIndex)
+                self.squares[j][i] = self.Str2PieceType(s, ppiecetypes)
 #---------------------------------------------------------------------------------------------------------
-    def SaveAsJsonFile(self, pfilename, pPieceTypeIndex):
+    def SaveAsJsonFile(self, pfilename, ppiecetypes):
         #Convert class structure to json and save as json file
         positionfile = open(pfilename, 'w')
         positiondict = {}
@@ -103,7 +103,7 @@ class chessposition:
             rj = (self.boardheight - 1) - j
             myvisualrank = ""
             for i in range(self.boardwidth):
-                mysymbol = self.PieceType2Str(self.squares[rj][i], pPieceTypeIndex)
+                mysymbol = self.PieceType2Str(self.squares[rj][i], ppiecetypes)
                 while len(mysymbol) < 2:
                     mysymbol = " " + mysymbol
                 myvisualrank += mysymbol
@@ -114,18 +114,19 @@ class chessposition:
         json.dump(positiondict, positionfile, indent=4)
         positionfile.close()
 #---------------------------------------------------------------------------------------------------------
-    def Str2PieceType(self, psymbol, pPieceTypeIndex):
-        for x in pPieceTypeIndex:
-            if psymbol == x[1]:
-                return x[0]
-            if psymbol == "-" + x[1]:
-                return x[0] * -1
+    def Str2PieceType(self, psymbol, ppiecetypes):
+        for i in range(len(ppiecetypes)):
+            if psymbol == ppiecetypes[i].symbol:
+                return i + 1
+            if psymbol == "-" + ppiecetypes[i].symbol:
+                return (i + 1) * -1
         return 0
 #---------------------------------------------------------------------------------------------------------
-    def PieceType2Str(self, ptypenr, pPieceTypeIndex):
-        for x in pPieceTypeIndex:
-            if ptypenr == x[0]:
-                return x[1]
-            if ptypenr == x[0] * -1:
-                return "-" + x[1]
+    def PieceType2Str(self, ptypenr, ppiecetypes):
+        if ptypenr > 0:
+            i = ptypenr - 1
+            return ppiecetypes[i].symbol
+        if ptypenr < 0:
+            i = (ptypenr * -1) - 1
+            return "-" + ppiecetypes[i].symbol
         return "."

@@ -9,11 +9,6 @@ class chessgame:
         self.boardheight = -1
         self.piecetypes = []
 
-        self.PieceTypeIndex = []
-        #We create a one-based index for the piece types
-        #So that these numbers refer to the white piecetypes, their negatives to the black piecetypes
-        #and zero will represent a vacant square
-
         self.mainposition = chessposition()
 #---------------------------------------------------------------------------------------------------------
     def LoadFromJsonFile(self, pfilename, ppositionfilename):
@@ -27,9 +22,8 @@ class chessgame:
         self.piecetypes.clear()
         for p in gamedict["piecetypes"]:
             self.LoadPiece(p)
-        self.BuildPieceTypeIndex()
 
-        self.mainposition.LoadFromJsonFile(ppositionfilename, self.PieceTypeIndex)
+        self.mainposition.LoadFromJsonFile(ppositionfilename, self.piecetypes)
         self.boardwidth = self.mainposition.boardwidth
         self.boardheight = self.mainposition.boardheight
 #---------------------------------------------------------------------------------------------------------
@@ -47,18 +41,13 @@ class chessgame:
         json.dump(gamedict, gamefile, indent=4)
         gamefile.close()
 
-        self.mainposition.SaveAsJsonFile(ppositionfilename, self.PieceTypeIndex)
+        self.mainposition.SaveAsJsonFile(ppositionfilename, self.piecetypes)
 #---------------------------------------------------------------------------------------------------------
     def LoadPiece(self, ppiecename):
         mytype = chesspiecetype()
         mytype.LoadFromJsonFile(".\\piecedefinitions\\" + ppiecename + ".json")
         mytype.SaveAsJsonFile(".\\piecedefinitions_verify\\" + ppiecename + ".json")
         self.piecetypes.append(mytype)
-#---------------------------------------------------------------------------------------------------------
-    def BuildPieceTypeIndex(self):
-        self.PieceTypeIndex.clear()
-        for i in range(len(self.piecetypes)):
-            self.PieceTypeIndex.append((i + 1, self.piecetypes[i].symbol))
 #---------------------------------------------------------------------------------------------------------
     def Position2MoveList(self, pposition):
         pposition.InitIsAttacked()
