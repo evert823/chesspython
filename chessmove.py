@@ -1,41 +1,46 @@
-import json
+import chesshelp
 
 class chessmove:
     def __init__(self, pi1, pj1, pi2, pj2):
-        self.MovingPieceSymbol = ""
+        self.MovingPiece = 0
         self.coordinates = (pi1, pj1, pi2, pj2)
         self.IsEnPassant = False
         self.IsCapture = False
         self.IsCastling = False
         #othercoordinates will give the Rook that co-moves with castling, or the pawn captured en passant
         self.othercoordinates = (-1, -1, -1, -1)
-    def ShortNotation(self):
+        self.PromoteToPiece = 0
+    def ShortNotation(self, ppiecetypes):
         if self.IsCastling == True:
             if self.coordinates[2] == 2:
                 return "0-0-0"
             else:
                 return "0-0"
-        s = self.MovingPieceSymbol
+        s = chesshelp.chesshelp.PieceType2Str(self.MovingPiece, ppiecetypes).replace("-", "")
         s += self.Coord2Squarename(self.coordinates[0], self.coordinates[1])
         if self.IsCapture == True:
             s += "x"
         else:
             s += "-"
         s += self.Coord2Squarename(self.coordinates[2], self.coordinates[3])
+        if self.PromoteToPiece != 0:
+            s += chesshelp.chesshelp.PieceType2Str(self.PromoteToPiece, ppiecetypes).replace("-", "")
         if self.IsEnPassant == True:
             s += " e.p."
         return s
-    def JsonString(self):
-        s = self.MovingPieceSymbol + " "
+    def JsonString(self, ppiecetypes):
+        s = chesshelp.chesshelp.PieceType2Str(self.MovingPiece, ppiecetypes) + " "
         s += f"({self.coordinates[0]}, {self.coordinates[1]}, {self.coordinates[2]}, {self.coordinates[3]}) "
         if self.IsEnPassant == True:
             s += "e.p. "
         if self.IsCastling == True:
-            s += self.ShortNotation() + " "
+            s += self.ShortNotation(ppiecetypes) + " "
         if self.IsCapture == True:
             s += "capture "
         if self.othercoordinates != (-1, -1, -1, -1):
             s += f"other coordinates ({self.othercoordinates[0]}, {self.othercoordinates[1]}, {self.othercoordinates[2]}, {self.othercoordinates[3]})"
+        if self.PromoteToPiece != 0:
+            s += " " + chesshelp.chesshelp.PieceType2Str(self.PromoteToPiece, ppiecetypes)
     
         return s
 

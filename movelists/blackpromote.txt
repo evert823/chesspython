@@ -1,0 +1,29 @@
+pb2-b1B|pb2-b1G|pb2-b1H|pb2-b1N|pb2-b1L|pb2-b1Q|pb2-b1R|pb2xc1B|pb2xc1G|pb2xc1H|pb2xc1N|pb2xc1L|pb2xc1Q|pb2xc1R|pd5-d4|Nh8-f7|Nh8-g6
+
+-p (1, 1, 1, 0)  -B
+-p (1, 1, 1, 0)  -G
+-p (1, 1, 1, 0)  -H
+-p (1, 1, 1, 0)  -N
+-p (1, 1, 1, 0)  -L
+-p (1, 1, 1, 0)  -Q
+-p (1, 1, 1, 0)  -R
+-p (1, 1, 2, 0) capture  -B
+-p (1, 1, 2, 0) capture  -G
+-p (1, 1, 2, 0) capture  -H
+-p (1, 1, 2, 0) capture  -N
+-p (1, 1, 2, 0) capture  -L
+-p (1, 1, 2, 0) capture  -Q
+-p (1, 1, 2, 0) capture  -R
+-p (3, 4, 3, 3) 
+-N (7, 7, 5, 6) 
+-N (7, 7, 6, 5) 
+
+........
+........
+.......X
+......X.
+.....X..
+....X...
+.X.X....
+........
+

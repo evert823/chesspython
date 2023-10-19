@@ -1,4 +1,5 @@
 import json
+import chesshelp
 
 class chessposition:
     def __init__(self):
@@ -73,7 +74,7 @@ class chessposition:
             mysymbol = positiondict["squares"][rj].split("|")
             for i in range(self.boardwidth):
                 s = mysymbol[i].lstrip()
-                self.squares[j][i] = self.Str2PieceType(s, ppiecetypes)
+                self.squares[j][i] = chesshelp.chesshelp.Str2PieceType(s, ppiecetypes)
 #---------------------------------------------------------------------------------------------------------
     def SaveAsJsonFile(self, pfilename, ppiecetypes):
         #Convert class structure to json and save as json file
@@ -103,7 +104,7 @@ class chessposition:
             rj = (self.boardheight - 1) - j
             myvisualrank = ""
             for i in range(self.boardwidth):
-                mysymbol = self.PieceType2Str(self.squares[rj][i], ppiecetypes)
+                mysymbol = chesshelp.chesshelp.PieceType2Str(self.squares[rj][i], ppiecetypes)
                 while len(mysymbol) < 2:
                     mysymbol = " " + mysymbol
                 myvisualrank += mysymbol
@@ -114,19 +115,3 @@ class chessposition:
         json.dump(positiondict, positionfile, indent=4)
         positionfile.close()
 #---------------------------------------------------------------------------------------------------------
-    def Str2PieceType(self, psymbol, ppiecetypes):
-        for i in range(len(ppiecetypes)):
-            if psymbol == ppiecetypes[i].symbol:
-                return i + 1
-            if psymbol == "-" + ppiecetypes[i].symbol:
-                return (i + 1) * -1
-        return 0
-#---------------------------------------------------------------------------------------------------------
-    def PieceType2Str(self, ptypenr, ppiecetypes):
-        if ptypenr > 0:
-            i = ptypenr - 1
-            return ppiecetypes[i].symbol
-        if ptypenr < 0:
-            i = (ptypenr * -1) - 1
-            return "-" + ppiecetypes[i].symbol
-        return "."

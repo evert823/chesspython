@@ -8,13 +8,13 @@ def ProcessTestPosition(pchessgame, pgamefilename, ppositionfilename):
     file2 = open(".\\movelists\\" + ppositionfilename + ".txt", "w")
     s = ""
     for i in range(len(a)):
-        s += a[i].ShortNotation()
+        s += a[i].ShortNotation(pchessgame.piecetypes)
         if i < len(a) - 1:
             s += "|"
     file2.write(s + "\n")
     file2.write("\n")
     for mv in a:
-        file2.write(mv.JsonString() + "\n")
+        file2.write(mv.JsonString(pchessgame.piecetypes) + "\n")
     file2.write("\n")
 
     for j in range(pchessgame.boardheight -1,-1,-1):
@@ -36,3 +36,5 @@ ProcessTestPosition(mychessgame, "maingame", "mainposition")
 ProcessTestPosition(mychessgame, "maingame", "testposition")
 ProcessTestPosition(mychessgame, "maingame", "whitecastle")
 ProcessTestPosition(mychessgame, "maingame", "blackcastle")
+ProcessTestPosition(mychessgame, "maingame", "whitepromote")
+ProcessTestPosition(mychessgame, "maingame", "blackpromote")
