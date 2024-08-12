@@ -447,3 +447,76 @@ class chessgame:
             myresultpos.colourtomove = 1
 
         return myresultpos
+#---------------------------------------------------------------------------------------------------------
+    def StaticEvaluation(self, pposition):
+        piecevalues = [13.0, 3.1, 4.0, 3.8, 4.0, 3.0, 3.4, 1.0, 9.1, 5.0]
+        materialbalance = 0.0
+        myresult = 0.0
+        #Locate white and black King:
+        i_kw = -1
+        j_kw = -1
+        i_kb = -1
+        j_kb = -1
+
+        for j in range(self.boardheight -1,-1,-1):
+            for i in range(self.boardheight):
+                if pposition.squares[j][i] != 0:
+                    pi = abs(pposition.squares[j][i]) - 1
+                    pt = self.piecetypes[pi]
+
+                    if pposition.squares[j][i] > 0:
+                        if pt.name == "King" and pt.IsRoyal == True:
+                            i_kw = i
+                            j_kw = j
+                        else:
+                            materialbalance += piecevalues[pi]
+                    else:
+                        if pt.name == "King" and pt.IsRoyal == True:
+                            i_kb = i
+                            j_kb = j
+                        else:
+                            materialbalance -= piecevalues[pi]
+
+        if i_kw == -1 and i_kb == -1:
+            myresult = -100.0 * pposition.colourtomove
+            return myresult
+        if i_kw == -1:
+            myresult = -100.0
+            return myresult
+        if i_kb == -1:
+            myresult = 100.0
+            return myresult
+        if materialbalance > 8:
+            myresult = 80.0
+            return myresult
+        if materialbalance < -8:
+            myresult = -80.0
+            return myresult
+        return materialbalance * 10
+#---------------------------------------------------------------------------------------------------------
+    def Calculation_n_plies(self, pposition, n_plies):
+        if n_plies > 3:
+            print(f"Start calculation n_plies = {n_plies}")
+
+        myresult = self.StaticEvaluation(pposition)
+
+        if n_plies == 0:
+            return myresult
+        if myresult in (-100, 100):
+            return myresult
+
+        a = self.Position2MoveList(pposition)
+        subresults = []
+        for i in range(len(a)):
+            newpos = self.ExecuteMove(pposition, a[i])
+            newvalue = self.Calculation_n_plies(newpos, n_plies - 1)
+            subresults.append((i, newvalue))
+
+        if pposition.colourtomove == 1:
+            res_sorted = sorted(subresults, key=lambda tup: tup[1], reverse=True)
+        else:
+            res_sorted = sorted(subresults, key=lambda tup: tup[1], reverse=False)
+        myresult = res_sorted[0][1]
+
+        return myresult
+#---------------------------------------------------------------------------------------------------------

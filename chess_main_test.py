@@ -1,20 +1,12 @@
 from chessgame import chessgame
 
 
-def TestExecuteMove(pchessgame, pgamefilename, ppositionfilename):
+def Test(pchessgame, pgamefilename, ppositionfilename):
     pchessgame.LoadFromJsonFile(".\\games\\" + pgamefilename + ".json", ".\\positions\\" + ppositionfilename + ".json")
     pchessgame.SaveAsJsonFile(".\\games_verify\\" + pgamefilename + ".json", ".\\positions_verify\\" + ppositionfilename + ".json")
-    a = pchessgame.Position2MoveList(pchessgame.mainposition)
-
-    mycounter = 0
-    for i in range(len(a)):
-        pos1 = pchessgame.ExecuteMove(pchessgame.mainposition, a[i])
-        a2 = pchessgame.Position2MoveList(pos1)
-        for i2 in range(len(a2)):
-            pos2 = pchessgame.ExecuteMove(pos1, a2[i2])
-            mycounter += pos2.colourtomove
-            if mycounter % 10000 == 0:
-                print(f"mycounter : {mycounter}")
+    
+    myval = pchessgame.Calculation_n_plies(pchessgame.mainposition, 5)
+    print(f"Result of static evaluation : {myval}")
 
 
 def ProcessTestPosition(pchessgame, pgamefilename, ppositionfilename):
@@ -53,7 +45,6 @@ mychessgame = chessgame()
 #ProcessTestPosition(mychessgame, "maingame", "blackcastle")
 #ProcessTestPosition(mychessgame, "maingame", "whitepromote")
 #ProcessTestPosition(mychessgame, "maingame", "blackpromote")
+#ProcessTestPosition(mychessgame, "maingame", "testposition")
 
-ProcessTestPosition(mychessgame, "maingame", "testposition")
-
-TestExecuteMove(mychessgame, "maingame", "testposition")
+Test(mychessgame, "maingame", "testposition")
