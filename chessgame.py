@@ -52,12 +52,6 @@ class chessgame:
 #---------------------------------------------------------------------------------------------------------
     def Position2MoveList(self, pposition):
         pposition.InitIsAttacked()
-        for i in range(self.boardwidth):
-            for j in range(self.boardheight):
-                if ((pposition.squares[j][i] > 0 and pposition.colourtomove < 0) or
-                    (pposition.squares[j][i] < 0 and pposition.colourtomove > 0)):
-                    self.GetStepLeapAttacks(pposition, i, j)
-                    self.GetSlideAttacks(pposition, i, j)
 
         MoveList = []
         for i in range(self.boardwidth):
@@ -150,6 +144,7 @@ class chessgame:
 
             if i2 >= 0 and i2 < self.boardwidth:
                 if j2 >= 0 and j2 < self.boardheight:
+                    pposition.IsAttacked[j2][i2] = True
                     if ((pposition.squares[j2][i2] > 0 and pposition.squares[j][i] < 0) or
                         (pposition.squares[j2][i2] < 0 and pposition.squares[j][i] > 0)):
                         mv = chessmove(i, j, i2, j2)
@@ -182,6 +177,7 @@ class chessgame:
             while (i2 >= 0 and i2 < self.boardwidth and
                    j2 >= 0 and j2 < self.boardheight and blocked == False):
 
+                pposition.IsAttacked[j2][i2] = True
                 if ((pposition.squares[j2][i2] > 0 and pposition.squares[j][i] < 0) or
                     (pposition.squares[j2][i2] < 0 and pposition.squares[j][i] > 0)):
                     mv = chessmove(i, j, i2, j2)
@@ -341,8 +337,6 @@ class chessgame:
                 if ((i > i_k and i <= i_k_new) or (i < i_k and i >= i_k_new)) and i != i_qr:
                     if pposition.squares[j][i] != 0:
                         queensidepossible = False
-                if ((i >= i_k and i <= i_k_new) or (i <= i_k and i >= i_k_new)) and pposition.IsAttacked[j][i] == True:
-                    queensidepossible = False
 
         if queensidepossible:
             mv = chessmove(i_k, j, i_k_new, j)
@@ -361,8 +355,6 @@ class chessgame:
                 if ((i > i_k and i <= i_k_new) or (i < i_k and i >= i_k_new)) and i != i_kr:
                     if pposition.squares[j][i] != 0:
                         kingsidepossible = False
-                if ((i >= i_k and i <= i_k_new) or (i <= i_k and i >= i_k_new)) and pposition.IsAttacked[j][i] == True:
-                    kingsidepossible = False
 
         if kingsidepossible:
             mv = chessmove(i_k, j, i_k_new, j)
@@ -410,57 +402,6 @@ class chessgame:
                     MoveList.append(mv2)
 
         return MoveList
-#---------------------------------------------------------------------------------------------------------
-    def GetStepLeapAttacks(self, pposition, i, j):
-        pt = self.piecetypes[abs(pposition.squares[j][i]) - 1]
-        if pt.IsDivergent == False:
-            lookatvectors = pt.stepleapmovevectors
-        else:
-            lookatvectors = pt.stepleapcapturevectors
-
-        for v in lookatvectors:
-            i2 = i + v[0]
-
-            if pposition.colourtomove == 1:
-                j2 = j - v[1]
-            else:
-                j2 = j + v[1]
-
-            if i2 >= 0 and i2 < self.boardwidth:
-                if j2 >= 0 and j2 < self.boardheight:
-                    pposition.IsAttacked[j2][i2] = True
-#---------------------------------------------------------------------------------------------------------
-    def GetSlideAttacks(self, pposition, i, j):
-        pt = self.piecetypes[abs(pposition.squares[j][i]) - 1]
-
-        if pt.IsDivergent == False:
-            lookatvectors = pt.slidemovevectors
-        else:
-            lookatvectors = pt.slidecapturevectors
-
-        for v in lookatvectors:
-            i2 = i + v[0]
-
-            if pposition.colourtomove == 1:
-                j2 = j - v[1]
-            else:
-                j2 = j + v[1]
-
-            blocked = False
-            while (i2 >= 0 and i2 < self.boardwidth and
-                   j2 >= 0 and j2 < self.boardheight and blocked == False):
-                
-                pposition.IsAttacked[j2][i2] = True
-
-                if pposition.squares[j2][i2] != 0:
-                    blocked = True
-
-                i2 = i2 + v[0]
-
-                if pposition.colourtomove == 1:
-                    j2 = j2 - v[1]
-                else:
-                    j2 = j2 + v[1]
 #---------------------------------------------------------------------------------------------------------
     def PrintIsAttacked(self, pposition):
         for j in range(self.boardheight -1,-1,-1):

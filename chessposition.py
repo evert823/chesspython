@@ -15,7 +15,7 @@ class chessposition:
         self.blackkingsiderookhasmoved = True
         self.blackqueensiderookhasmoved = True
         self.squares = []
-        self.IsAttacked = [] #To mark if a square is controlled by piece NOT from colourtomove - calculated
+        self.IsAttacked = [] #To mark if a square is controlled by piece from colourtomove - calculated
 #---------------------------------------------------------------------------------------------------------
     def ResetBoardsize(self, pboardwidth, pboardheight):
         self.boardwidth = pboardwidth
