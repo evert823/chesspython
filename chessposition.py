@@ -15,7 +15,7 @@ class chessposition:
         self.blackkingsiderookhasmoved = True
         self.blackqueensiderookhasmoved = True
         self.squares = []
-        self.IsAttacked = [] #To mark if a square is controlled by piece from colourtomove - calculated
+        self.AttackedSquares = [] #list of squares as tuples (i,j) that the opponent is attacking
 #---------------------------------------------------------------------------------------------------------
     def ResetBoardsize(self, pboardwidth, pboardheight):
         self.boardwidth = pboardwidth
@@ -26,17 +26,6 @@ class chessposition:
             for i in range(self.boardwidth):
                 myrank.append(0)
             self.squares.append(myrank)
-        self.IsAttacked.clear()
-        for j in range(self.boardheight):
-            myrank = []
-            for i in range(self.boardwidth):
-                myrank.append(False)
-            self.IsAttacked.append(myrank)
-#---------------------------------------------------------------------------------------------------------
-    def InitIsAttacked(self):
-        for i in range(self.boardwidth):
-            for j in range(self.boardheight):
-                self.IsAttacked[j][i] = False
 #---------------------------------------------------------------------------------------------------------
     def LoadFromJsonFile(self, pfilename, ppiecetypes):
         #Load from json file and convert to class structure

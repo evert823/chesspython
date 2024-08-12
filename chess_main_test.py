@@ -5,8 +5,9 @@ def Test(pchessgame, pgamefilename, ppositionfilename):
     pchessgame.LoadFromJsonFile(".\\games\\" + pgamefilename + ".json", ".\\positions\\" + ppositionfilename + ".json")
     pchessgame.SaveAsJsonFile(".\\games_verify\\" + pgamefilename + ".json", ".\\positions_verify\\" + ppositionfilename + ".json")
     
-    myval = pchessgame.Calculation_n_plies(pchessgame.mainposition, 5)
-    print(f"Result of static evaluation : {myval}")
+    myval = pchessgame.Calculation_n_plies(pchessgame.mainposition, 3)
+    print(pchessgame.mainposition.AttackedSquares)
+    print(f"Result of evaluation : {myval}")
 
 
 def ProcessTestPosition(pchessgame, pgamefilename, ppositionfilename):
@@ -25,15 +26,6 @@ def ProcessTestPosition(pchessgame, pgamefilename, ppositionfilename):
         file2.write(mv.JsonString(pchessgame.piecetypes) + "\n")
     file2.write("\n")
 
-    for j in range(pchessgame.boardheight -1,-1,-1):
-        s = ""
-        for i in range(pchessgame.boardheight):
-            if pchessgame.mainposition.IsAttacked[j][i] == True:
-                s += 'X'
-            else:
-                s += '.'
-        file2.write(s + "\n")
-
     file2.write("\n")
     file2.close()
 
@@ -45,6 +37,6 @@ mychessgame = chessgame()
 #ProcessTestPosition(mychessgame, "maingame", "blackcastle")
 #ProcessTestPosition(mychessgame, "maingame", "whitepromote")
 #ProcessTestPosition(mychessgame, "maingame", "blackpromote")
-#ProcessTestPosition(mychessgame, "maingame", "testposition")
+ProcessTestPosition(mychessgame, "maingame", "testposition")
 
 Test(mychessgame, "maingame", "testposition")

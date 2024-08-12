@@ -3,20 +3,20 @@
     "boardheight": 8,
     "colourtomove": -1,
     "precedingmove": {"x_from": -1, "y_from": -1, "x_to": -1, "y_to": -1},
-    "castlinginfo": {"whitekinghasmoved": true,
-                     "whitekingsiderookhasmoved": true,
-                     "whitequeensiderookhasmoved": true,
-                     "blackkinghasmoved": true,
-                     "blackkingsiderookhasmoved": true,
-                     "blackqueensiderookhasmoved": true},
+    "castlinginfo": {"whitekinghasmoved": false,
+                     "whitekingsiderookhasmoved": false,
+                     "whitequeensiderookhasmoved": false,
+                     "blackkinghasmoved": false,
+                     "blackkingsiderookhasmoved": false,
+                     "blackqueensiderookhasmoved": false},
     "squares": [
-        " .| .|-K| .| .| .| .| .",
+        " N| .| .| .| .| .| .| .",
+        " .| .| K| .| .| .| .| .",
         " .| .| .| .| .| .| .| .",
-        " .| .| .| .| .| .|-Q| .",
         " .| .| .| .| .| .| .| .",
         " .| .| .| .| .| .| .| .",
-        "-N| .| p| .| .| .| .| .",
-        " p| p| .| .| .| .| .| .",
-        " K| .| G| .| .| .| .| ."
+        " .| .| .| .| .| .| .| .",
+        " .| .| .| .| .| .| .| .",
+        " .| .| .| .| .| .| .| ."
     ]
 }
