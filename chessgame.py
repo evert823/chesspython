@@ -412,3 +412,38 @@ class chessgame:
                 else:
                     s += '.'
             print(s)
+#---------------------------------------------------------------------------------------------------------
+    def ExecuteMove(self, pposition, pmove):
+        myresultpos = copy.deepcopy(pposition)
+
+        i1 = pmove.coordinates[0]
+        j1 = pmove.coordinates[1]
+        i2 = pmove.coordinates[2]
+        j2 = pmove.coordinates[3]
+
+        if pmove.PromoteToPiece != 0:
+            myresultpos.squares[j2][i2] = pmove.PromoteToPiece
+        else:
+            myresultpos.squares[j2][i2] = pmove.MovingPiece
+        myresultpos.squares[j1][i1] = 0
+
+        if pmove.IsEnPassant == True:
+            io1 = pmove.othercoordinates[0]
+            jo1 = pmove.othercoordinates[1]
+            myresultpos.squares[jo1][io1] = 0
+
+        if pmove.IsCastling == True:
+            io1 = pmove.othercoordinates[0]
+            jo1 = pmove.othercoordinates[1]
+            io2 = pmove.othercoordinates[2]
+            jo2 = pmove.othercoordinates[3]
+            otherpiece = myresultpos.squares[jo1][io1]
+            myresultpos.squares[jo1][io1] = 0
+            myresultpos.squares[jo2][io2] = otherpiece
+
+        if pposition.colourtomove == 1:
+            myresultpos.colourtomove = -1
+        else:
+            myresultpos.colourtomove = 1
+
+        return myresultpos
