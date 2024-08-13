@@ -1,13 +1,17 @@
 from chessgame import chessgame
-
+from datetime import datetime
 
 def Test(pchessgame, pgamefilename, ppositionfilename):
     pchessgame.LoadFromJsonFile(".\\games\\" + pgamefilename + ".json", ".\\positions\\" + ppositionfilename + ".json")
     pchessgame.SaveAsJsonFile(".\\games_verify\\" + pgamefilename + ".json", ".\\positions_verify\\" + ppositionfilename + ".json")
     
-    myval = pchessgame.Calculation_n_plies(pchessgame.mainposition, 3)
-    print(pchessgame.mainposition.AttackedSquares)
-    print(f"Result of evaluation : {myval}")
+    print(datetime.now())
+    myval, mymv = pchessgame.Calculation_n_plies(pchessgame.mainposition, 4)
+    mymvstr = mymv.ShortNotation(pchessgame.piecetypes)
+    print(f"PM in check True/False : {pchessgame.mainposition.PMKingIsInCheck()}")
+    print(f"PO in check True/False : {pchessgame.mainposition.POKingIsInCheck()}")
+    print(f"Result of evaluation : {myval} {mymvstr}")
+    print(datetime.now())
 
 
 def ProcessTestPosition(pchessgame, pgamefilename, ppositionfilename):
@@ -39,4 +43,4 @@ mychessgame = chessgame()
 #ProcessTestPosition(mychessgame, "maingame", "blackpromote")
 ProcessTestPosition(mychessgame, "maingame", "testposition")
 
-Test(mychessgame, "maingame", "testposition")
+Test(mychessgame, "maingame", "mate_in_2_for_black")

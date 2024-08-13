@@ -50,22 +50,39 @@ class chessgame:
         mytype.SaveAsJsonFile(".\\piecedefinitions_verify\\" + ppiecename + ".json")
         self.piecetypes.append(mytype)
 #---------------------------------------------------------------------------------------------------------
-    def ScanAttackedByOpponent(self, pposition):
-        AttackedSquares = []
+    def ScanAttacked(self, pposition):
+        SquaresAttackedByPM = []
+        SquaresAttackedByPO = []
         for i in range(self.boardwidth):
             for j in range(self.boardheight):
+
+                if pposition.squares[j][i] != 0:
+                    pt = self.piecetypes[abs(pposition.squares[j][i]) - 1]
+                    if pt.name == "King" and pt.IsRoyal == True:
+                        if pposition.squares[j][i] > 0:
+                            pposition.whitekingcoord = (i, j)
+                        else:
+                            pposition.blackkingcoord = (i, j)
+
+                if ((pposition.squares[j][i] > 0 and pposition.colourtomove > 0) or
+                    (pposition.squares[j][i] < 0 and pposition.colourtomove < 0)):
+                    SquaresAttackedByPM.extend(self.GetStepLeapAttacks(pposition, i, j))
+                    SquaresAttackedByPM.extend(self.GetSlideAttacks(pposition, i, j))
                 if ((pposition.squares[j][i] > 0 and pposition.colourtomove < 0) or
                     (pposition.squares[j][i] < 0 and pposition.colourtomove > 0)):
-                    AttackedSquares.extend(self.GetStepLeapAttacks(pposition, i, j))
-                    AttackedSquares.extend(self.GetSlideAttacks(pposition, i, j))
-        a_dedup = []
-        for x in AttackedSquares:
-            if x not in a_dedup:
-                a_dedup.append(x)
-        return a_dedup
+                    SquaresAttackedByPO.extend(self.GetStepLeapAttacks(pposition, i, j))
+                    SquaresAttackedByPO.extend(self.GetSlideAttacks(pposition, i, j))
+        pposition.SquaresAttackedByPM = []
+        for x in SquaresAttackedByPM:
+            if x not in pposition.SquaresAttackedByPM:
+                pposition.SquaresAttackedByPM.append(x)
+        pposition.SquaresAttackedByPO = []
+        for x in SquaresAttackedByPO:
+            if x not in pposition.SquaresAttackedByPO:
+                pposition.SquaresAttackedByPO.append(x)
 #---------------------------------------------------------------------------------------------------------
     def GetStepLeapAttacks(self, pposition, i, j):
-        AttackedSquares = []
+        SquaresAttacked = []
         pt = self.piecetypes[abs(pposition.squares[j][i]) - 1]
         if pt.IsDivergent == False:
             lookatvectors = pt.stepleapmovevectors
@@ -82,11 +99,11 @@ class chessgame:
 
             if i2 >= 0 and i2 < self.boardwidth:
                 if j2 >= 0 and j2 < self.boardheight:
-                    AttackedSquares.append((i2, j2))
-        return AttackedSquares
+                    SquaresAttacked.append((i2, j2))
+        return SquaresAttacked
 #---------------------------------------------------------------------------------------------------------
     def GetSlideAttacks(self, pposition, i, j):
-        AttackedSquares = []
+        SquaresAttacked = []
         pt = self.piecetypes[abs(pposition.squares[j][i]) - 1]
 
         if pt.IsDivergent == False:
@@ -106,7 +123,7 @@ class chessgame:
             while (i2 >= 0 and i2 < self.boardwidth and
                    j2 >= 0 and j2 < self.boardheight and blocked == False):
                 
-                AttackedSquares.append((i2, j2))
+                SquaresAttacked.append((i2, j2))
 
                 if pposition.squares[j2][i2] != 0:
                     blocked = True
@@ -117,10 +134,9 @@ class chessgame:
                     j2 = j2 - v[1]
                 else:
                     j2 = j2 + v[1]
-        return AttackedSquares
+        return SquaresAttacked
 #---------------------------------------------------------------------------------------------------------
     def Position2MoveList(self, pposition):
-        pposition.AttackedSquares = self.ScanAttackedByOpponent(pposition)
         MoveList = []
         for i in range(self.boardwidth):
             for j in range(self.boardheight):
@@ -416,7 +432,7 @@ class chessgame:
                 if ((i > i_k and i <= i_k_new) or (i < i_k and i >= i_k_new)) and i != i_qr:
                     if pposition.squares[j][i] != 0:
                         queensidepossible = False
-                if ((i >= i_k and i <= i_k_new) or (i <= i_k and i >= i_k_new)) and (i,j) in pposition.AttackedSquares:
+                if ((i >= i_k and i <= i_k_new) or (i <= i_k and i >= i_k_new)) and (i,j) in pposition.SquaresAttackedByPO:
                     queensidepossible = False
 
         if queensidepossible:
@@ -436,7 +452,7 @@ class chessgame:
                 if ((i > i_k and i <= i_k_new) or (i < i_k and i >= i_k_new)) and i != i_kr:
                     if pposition.squares[j][i] != 0:
                         kingsidepossible = False
-                if ((i >= i_k and i <= i_k_new) or (i <= i_k and i >= i_k_new)) and (i,j) in pposition.AttackedSquares:
+                if ((i >= i_k and i <= i_k_new) or (i <= i_k and i >= i_k_new)) and (i,j) in pposition.SquaresAttackedByPO:
                     kingsidepossible = False
 
         if kingsidepossible:
@@ -592,28 +608,40 @@ class chessgame:
         return materialbalance * 10
 #---------------------------------------------------------------------------------------------------------
     def Calculation_n_plies(self, pposition, n_plies):
-        if n_plies > 3:
-            print(f"Start calculation n_plies = {n_plies}")
 
-        myresult = self.StaticEvaluation(pposition)
+        evalresult = self.StaticEvaluation(pposition)
 
         if n_plies == 0:
-            return myresult
-        if myresult in (-100, 100):
-            return myresult
+            return evalresult, None
+        if evalresult in (-100.0, 100.0):
+            return evalresult, None
 
-        a = self.Position2MoveList(pposition)
+        self.ScanAttacked(pposition)
+
+        if pposition.POKingIsInCheck() == True:
+            if pposition.colourtomove == 1:
+                evalresult = 100.0
+            else:
+                evalresult = -100.0
+            return evalresult, None
+
+        movelist = self.Position2MoveList(pposition)
         subresults = []
-        for i in range(len(a)):
-            newpos = self.ExecuteMove(pposition, a[i])
-            newvalue = self.Calculation_n_plies(newpos, n_plies - 1)
+        for i in range(len(movelist)):
+            newpos = self.ExecuteMove(pposition, movelist[i])
+            newvalue, _ = self.Calculation_n_plies(newpos, n_plies - 1)
             subresults.append((i, newvalue))
 
         if pposition.colourtomove == 1:
             res_sorted = sorted(subresults, key=lambda tup: tup[1], reverse=True)
         else:
             res_sorted = sorted(subresults, key=lambda tup: tup[1], reverse=False)
-        myresult = res_sorted[0][1]
 
-        return myresult
+        evalresult = res_sorted[0][1]
+        bestmove = copy.deepcopy(movelist[res_sorted[0][0]])
+
+        if n_plies > 3:
+            print(f"Result of deep evaluation plies {n_plies} {evalresult} {bestmove.ShortNotation(self.piecetypes)}")
+
+        return evalresult, bestmove
 #---------------------------------------------------------------------------------------------------------

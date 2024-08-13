@@ -15,7 +15,10 @@ class chessposition:
         self.blackkingsiderookhasmoved = True
         self.blackqueensiderookhasmoved = True
         self.squares = []
-        self.AttackedSquares = [] #list of squares as tuples (i,j) that the opponent is attacking
+        self.SquaresAttackedByPM = [] #list of squares as tuples (i,j) that the player to move is attacking
+        self.SquaresAttackedByPO = [] #list of squares as tuples (i,j) that the opponent is attacking
+        self.whitekingcoord = (-1, -1)
+        self.blackkingcoord = (-1, -1)
 #---------------------------------------------------------------------------------------------------------
     def ResetBoardsize(self, pboardwidth, pboardheight):
         self.boardwidth = pboardwidth
@@ -104,3 +107,38 @@ class chessposition:
         json.dump(positiondict, positionfile, indent=4)
         positionfile.close()
 #---------------------------------------------------------------------------------------------------------
+    def WhiteKingIsInCheck(self):
+        if self.colourtomove == 1:
+            if self.whitekingcoord in self.SquaresAttackedByPO:
+                return True
+        else:
+            if self.whitekingcoord in self.SquaresAttackedByPM:
+                return True
+        return False
+#---------------------------------------------------------------------------------------------------------
+    def BlackKingIsInCheck(self):
+        if self.colourtomove == 1:
+            if self.blackkingcoord in self.SquaresAttackedByPM:
+                return True
+        else:
+            if self.blackkingcoord in self.SquaresAttackedByPO:
+                return True
+        return False
+#---------------------------------------------------------------------------------------------------------
+    def PMKingIsInCheck(self):
+        if self.colourtomove == 1:
+            if self.whitekingcoord in self.SquaresAttackedByPO:
+                return True
+        else:
+            if self.blackkingcoord in self.SquaresAttackedByPO:
+                return True
+        return False
+#---------------------------------------------------------------------------------------------------------
+    def POKingIsInCheck(self):
+        if self.colourtomove == 1:
+            if self.blackkingcoord in self.SquaresAttackedByPM:
+                return True
+        else:
+            if self.whitekingcoord in self.SquaresAttackedByPM:
+                return True
+        return False
