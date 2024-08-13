@@ -608,13 +608,15 @@ class chessgame:
         return materialbalance * 10
 #---------------------------------------------------------------------------------------------------------
     def Calculation_n_plies(self, pposition, n_plies):
+        #response must be tuple len 3 (x, y, z)
+        #x = evaluation float
+        #y = chessmove object instance
+        #z = boolean Yes if opponent's King in check else No
 
         evalresult = self.StaticEvaluation(pposition)
 
-        if n_plies == 0:
-            return evalresult, None
         if evalresult in (-100.0, 100.0):
-            return evalresult, None
+            return (evalresult, None, False)
 
         self.ScanAttacked(pposition)
 
@@ -623,14 +625,33 @@ class chessgame:
                 evalresult = 100.0
             else:
                 evalresult = -100.0
-            return evalresult, None
+            return (evalresult, None, True)
+
+        if n_plies == 0:
+            return (evalresult, None, False)
 
         movelist = self.Position2MoveList(pposition)
         subresults = []
+
+        noescapecheck = True
         for i in range(len(movelist)):
             newpos = self.ExecuteMove(pposition, movelist[i])
-            newvalue, _ = self.Calculation_n_plies(newpos, n_plies - 1)
+            newvalue, _, me_in_check = self.Calculation_n_plies(newpos, n_plies - 1)
+            if me_in_check == False:
+                noescapecheck = False
             subresults.append((i, newvalue))
+
+        #Mate
+        if pposition.PMKingIsInCheck() == True and noescapecheck == True:
+            if pposition.colourtomove == 1:
+                evalresult = -100.0
+            else:
+                evalresult = 100.0
+            return (evalresult, None, False)
+        #Stalemate
+        if pposition.PMKingIsInCheck() == False and noescapecheck == True:
+            evalresult = 0.0
+            return (evalresult, None, False)
 
         if pposition.colourtomove == 1:
             res_sorted = sorted(subresults, key=lambda tup: tup[1], reverse=True)
@@ -640,8 +661,5 @@ class chessgame:
         evalresult = res_sorted[0][1]
         bestmove = copy.deepcopy(movelist[res_sorted[0][0]])
 
-        if n_plies > 3:
-            print(f"Result of deep evaluation plies {n_plies} {evalresult} {bestmove.ShortNotation(self.piecetypes)}")
-
-        return evalresult, bestmove
+        return (evalresult, bestmove, False)
 #---------------------------------------------------------------------------------------------------------
