@@ -20,6 +20,12 @@ class chessposition:
         self.whitekingcoord = (-1, -1)
         self.blackkingcoord = (-1, -1)
 #---------------------------------------------------------------------------------------------------------
+    def ClearNonPersistent(self):
+        self.SquaresAttackedByPM.clear()
+        self.SquaresAttackedByPO.clear()
+        self.whitekingcoord = (-1, -1)
+        self.blackkingcoord = (-1, -1)
+#---------------------------------------------------------------------------------------------------------
     def ResetBoardsize(self, pboardwidth, pboardheight):
         self.boardwidth = pboardwidth
         self.boardheight = pboardheight

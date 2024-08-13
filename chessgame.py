@@ -92,10 +92,10 @@ class chessgame:
         for v in lookatvectors:
             i2 = i + v[0]
 
-            if pposition.colourtomove == 1:
-                j2 = j - v[1]
-            else:
+            if pposition.squares[j][i] > 0:
                 j2 = j + v[1]
+            else:
+                j2 = j - v[1]
 
             if i2 >= 0 and i2 < self.boardwidth:
                 if j2 >= 0 and j2 < self.boardheight:
@@ -114,10 +114,10 @@ class chessgame:
         for v in lookatvectors:
             i2 = i + v[0]
 
-            if pposition.colourtomove == 1:
-                j2 = j - v[1]
-            else:
+            if pposition.squares[j][i] > 0:
                 j2 = j + v[1]
+            else:
+                j2 = j - v[1]
 
             blocked = False
             while (i2 >= 0 and i2 < self.boardwidth and
@@ -130,10 +130,10 @@ class chessgame:
 
                 i2 = i2 + v[0]
 
-                if pposition.colourtomove == 1:
-                    j2 = j2 - v[1]
-                else:
+                if pposition.squares[j][i] > 0:
                     j2 = j2 + v[1]
+                else:
+                    j2 = j2 - v[1]
         return SquaresAttacked
 #---------------------------------------------------------------------------------------------------------
     def Position2MoveList(self, pposition):
@@ -504,6 +504,7 @@ class chessgame:
 #---------------------------------------------------------------------------------------------------------
     def ExecuteMove(self, pposition, pmove):
         myresultpos = copy.deepcopy(pposition)
+        myresultpos.ClearNonPersistent()
 
         i1 = pmove.coordinates[0]
         j1 = pmove.coordinates[1]
@@ -635,6 +636,7 @@ class chessgame:
 
         noescapecheck = True
         for i in range(len(movelist)):
+            #print(movelist[i].ShortNotation(self.piecetypes))
             newpos = self.ExecuteMove(pposition, movelist[i])
             newvalue, _, me_in_check = self.Calculation_n_plies(newpos, n_plies - 1)
             if me_in_check == False:
@@ -650,6 +652,7 @@ class chessgame:
             return (evalresult, None, False)
         #Stalemate
         if pposition.PMKingIsInCheck() == False and noescapecheck == True:
+            print("STALEMATE!!!")
             evalresult = 0.0
             return (evalresult, None, False)
 
