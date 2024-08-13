@@ -1,1 +1,7 @@
 *.pyc
+__pycache__/
+games_verify/
+movelists/
+piecedefinitions_verify/
+positions/
+positions_verify/
