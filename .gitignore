@@ -5,3 +5,7 @@ movelists/
 piecedefinitions_verify/
 positions/
 positions_verify/
+/__pycache__
+/__pycache__
+/positions
+/positions_verify

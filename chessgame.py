@@ -634,6 +634,11 @@ class chessgame:
         movelist = self.Position2MoveList(pposition)
         subresults = []
 
+        if pposition.colourtomove == 1:
+            goodenoughstopvalue = 100.0
+        else:
+            goodenoughstopvalue = -100.0
+
         noescapecheck = True
         for i in range(len(movelist)):
             #print(movelist[i].ShortNotation(self.piecetypes))
@@ -642,6 +647,13 @@ class chessgame:
             if me_in_check == False:
                 noescapecheck = False
             subresults.append((i, newvalue))
+
+            if pposition.colourtomove == 1:
+                if newvalue >= goodenoughstopvalue:
+                    break
+            else:
+                if newvalue <= goodenoughstopvalue:
+                    break
 
         #Mate
         if pposition.PMKingIsInCheck() == True and noescapecheck == True:

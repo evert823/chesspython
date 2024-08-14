@@ -79,16 +79,14 @@ def CreateHunterEndgame(pposition, ppiecetypes, pboardwidth, pboardheight):
     for i in range(len(ppiecetypes)):
         pt = ppiecetypes[i]
         if pt.name == "King":
-            PutPiece(pposition, 0, 4, 0, 4, i, 1)
-            PutPiece(pposition, 0, 4, 0, 4, i, -1)
+            PutPiece(pposition, 0, 3, 0, 3, i, -1)
+            PutPiece(pposition, 0, 4, 0, 5, i, 1)
         elif pt.name == "Hunter":
-            PutPiece(pposition, 0, 4, 0, 4, i, 1)
+            PutPiece(pposition, 0, 5, 0, 4, i, 1)
         elif pt.name == "Bishop":
-            PutPiece(pposition, 0, 4, 0, 4, i, 1)
+            PutPiece(pposition, 0, 7, 0, 7, i, 1)
         elif pt.name == "Knight":
-            PutPiece(pposition, 0, 4, 0, 4, i, 1)
-
-
+            PutPiece(pposition, 0, 6, 0, 6, i, 1)
 
 def CreateRandom_main():
     myval = 100.0
@@ -114,15 +112,19 @@ def CreateRandom_main():
     print(f"Result of evaluation : {myval} {mymvstr}")
 
 def CreateHunter_main():
+    random.seed()
     myval = 100.0
     myval2 = 50.0
 
+    myseq = 0
+
     while myval2 != 100.0:
+        myval = 100.0
         while myval >= 100.0 or myval <= -100.0:
             ClearBoard(mychessgame.mainposition, mychessgame.boardwidth, mychessgame.boardheight)
             CreateHunterEndgame(mychessgame.mainposition, mychessgame.piecetypes, mychessgame.boardwidth, mychessgame.boardheight)
             TuneCastlingInfo(mychessgame.mainposition, mychessgame.piecetypes)
-            myval, mymv, _ = mychessgame.Calculation_n_plies(mychessgame.mainposition, 1)
+            myval, mymv, _ = mychessgame.Calculation_n_plies(mychessgame.mainposition, 3)
 
         try:
             mymvstr = mymv.ShortNotation(mychessgame.piecetypes)
@@ -130,15 +132,17 @@ def CreateHunter_main():
             mymvstr = "No move"
         print(f"Result of evaluation : {myval} {mymvstr}")
 
-        mychessgame.SaveAsJsonFile(".\\games_verify\\setup01.json", ".\\positions_verify\\random_01.json")
+        myseq += 1
+        mychessgame.SaveAsJsonFile(".\\games_verify\\setup01.json", f".\\positions_verify\\huntermate_{myseq}.json")
 
         print(f"Starting deeper calculation on this one {datetime.now()}")
-        myval2, mymv, _ = mychessgame.Calculation_n_plies(mychessgame.mainposition, 6)
+        myval2, mymv, _ = mychessgame.Calculation_n_plies(mychessgame.mainposition, 7)
         try:
             mymvstr = mymv.ShortNotation(mychessgame.piecetypes)
         except:
             mymvstr = "No move"
         print(f"Result of evaluation : {myval2} {mymvstr}")
+        print(f"Ended the deeper calculation {datetime.now()}")
 
 mychessgame = chessgame()
 

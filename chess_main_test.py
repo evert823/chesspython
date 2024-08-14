@@ -6,12 +6,12 @@ def Test(pchessgame, pgamefilename, ppositionfilename):
     pchessgame.SaveAsJsonFile(".\\games_verify\\" + pgamefilename + ".json", ".\\positions_verify\\" + ppositionfilename + ".json")
     
     print(datetime.now())
-    myval, mymv, _ = pchessgame.Calculation_n_plies(pchessgame.mainposition, 5)
+    myval, mymv, _ = pchessgame.Calculation_n_plies(pchessgame.mainposition, 8)
     try:
         mymvstr = mymv.ShortNotation(pchessgame.piecetypes)
     except:
         mymvstr = "No move"
-    print(f"Result of evaluation : {myval} {mymvstr}")
+    print(f"Result of evaluation {ppositionfilename}: {myval} {mymvstr}")
     print(datetime.now())
 
 
@@ -42,6 +42,6 @@ mychessgame = chessgame()
 #ProcessTestPosition(mychessgame, "maingame", "blackcastle")
 #ProcessTestPosition(mychessgame, "maingame", "whitepromote")
 #ProcessTestPosition(mychessgame, "maingame", "blackpromote")
-ProcessTestPosition(mychessgame, "maingame", "testposition")
+#ProcessTestPosition(mychessgame, "maingame", "testposition")
 
 Test(mychessgame, "maingame", "testposition")
