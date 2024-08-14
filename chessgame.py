@@ -652,7 +652,6 @@ class chessgame:
             return (evalresult, None, False)
         #Stalemate
         if pposition.PMKingIsInCheck() == False and noescapecheck == True:
-            print("STALEMATE!!!")
             evalresult = 0.0
             return (evalresult, None, False)
 
