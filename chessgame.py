@@ -51,8 +51,8 @@ class chessgame:
         self.piecetypes.append(mytype)
 #---------------------------------------------------------------------------------------------------------
     def ScanAttacked(self, pposition):
-        SquaresAttackedByPM = []
-        SquaresAttackedByPO = []
+        SquaresAttackedByPMdup = []
+        SquaresAttackedByPOdup = []
         for i in range(self.boardwidth):
             for j in range(self.boardheight):
 
@@ -66,18 +66,18 @@ class chessgame:
 
                 if ((pposition.squares[j][i] > 0 and pposition.colourtomove > 0) or
                     (pposition.squares[j][i] < 0 and pposition.colourtomove < 0)):
-                    SquaresAttackedByPM.extend(self.GetStepLeapAttacks(pposition, i, j))
-                    SquaresAttackedByPM.extend(self.GetSlideAttacks(pposition, i, j))
+                    SquaresAttackedByPMdup.extend(self.GetStepLeapAttacks(pposition, i, j))
+                    SquaresAttackedByPMdup.extend(self.GetSlideAttacks(pposition, i, j))
                 if ((pposition.squares[j][i] > 0 and pposition.colourtomove < 0) or
                     (pposition.squares[j][i] < 0 and pposition.colourtomove > 0)):
-                    SquaresAttackedByPO.extend(self.GetStepLeapAttacks(pposition, i, j))
-                    SquaresAttackedByPO.extend(self.GetSlideAttacks(pposition, i, j))
+                    SquaresAttackedByPOdup.extend(self.GetStepLeapAttacks(pposition, i, j))
+                    SquaresAttackedByPOdup.extend(self.GetSlideAttacks(pposition, i, j))
         pposition.SquaresAttackedByPM = []
-        for x in SquaresAttackedByPM:
+        for x in SquaresAttackedByPMdup:
             if x not in pposition.SquaresAttackedByPM:
                 pposition.SquaresAttackedByPM.append(x)
         pposition.SquaresAttackedByPO = []
-        for x in SquaresAttackedByPO:
+        for x in SquaresAttackedByPOdup:
             if x not in pposition.SquaresAttackedByPO:
                 pposition.SquaresAttackedByPO.append(x)
 #---------------------------------------------------------------------------------------------------------
