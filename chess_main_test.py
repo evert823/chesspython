@@ -2,11 +2,11 @@ from chessgame import chessgame
 from datetime import datetime
 
 def Test(pchessgame, pgamefilename, ppositionfilename):
-    pchessgame.LoadFromJsonFile(".\\games\\" + pgamefilename + ".json", ".\\positions\\" + ppositionfilename + ".json")
-    pchessgame.SaveAsJsonFile(".\\games_verify\\" + pgamefilename + ".json", ".\\positions_verify\\" + ppositionfilename + ".json")
+    pchessgame.LoadFromJsonFile(".\\games\\" + pgamefilename + ".json", f"{mylocalpath}\\positions\\" + ppositionfilename + ".json")
+    pchessgame.SaveAsJsonFile(f"{mylocalpath}\\games_verify\\" + pgamefilename + ".json", f"{mylocalpath}\\positions_verify\\" + ppositionfilename + ".json")
     
     print(datetime.now())
-    myval, mymv, _ = pchessgame.Calculation_n_plies(pchessgame.mainposition, 6)
+    myval, mymv, _ = pchessgame.Calculation_n_plies(pchessgame.mainposition, 4)
     try:
         mymvstr = mymv.ShortNotation(pchessgame.piecetypes)
     except:
@@ -16,8 +16,8 @@ def Test(pchessgame, pgamefilename, ppositionfilename):
 
 
 def ProcessTestPosition(pchessgame, pgamefilename, ppositionfilename):
-    pchessgame.LoadFromJsonFile(".\\games\\" + pgamefilename + ".json", ".\\positions\\" + ppositionfilename + ".json")
-    pchessgame.SaveAsJsonFile(".\\games_verify\\" + pgamefilename + ".json", ".\\positions_verify\\" + ppositionfilename + ".json")
+    pchessgame.LoadFromJsonFile(".\\games\\" + pgamefilename + ".json", f"{mylocalpath}\\positions\\" + ppositionfilename + ".json")
+    pchessgame.SaveAsJsonFile(f"{mylocalpath}\\games_verify\\" + pgamefilename + ".json", f"{mylocalpath}\\positions_verify\\" + ppositionfilename + ".json")
     a = pchessgame.mainposition.Position2MoveList(pchessgame.piecetypes)
     file2 = open(".\\movelists\\" + ppositionfilename + ".txt", "w")
     s = ""
@@ -36,20 +36,20 @@ def ProcessTestPosition(pchessgame, pgamefilename, ppositionfilename):
 
 
 def SwapPosition(pchessgame, pgamefilename, ppositionfilename):
-    pchessgame.LoadFromJsonFile(".\\games\\" + pgamefilename + ".json", ".\\positions\\" + ppositionfilename + ".json")
+    pchessgame.LoadFromJsonFile(".\\games\\" + pgamefilename + ".json", f"{mylocalpath}\\positions\\" + ppositionfilename + ".json")
     pchessgame.mainposition = pchessgame.SwapBlackWhite(pchessgame.mainposition)
-    pchessgame.SaveAsJsonFile(".\\games_verify\\" + pgamefilename + ".json", ".\\positions\\" + ppositionfilename + "_reversed.json")
+    pchessgame.SaveAsJsonFile(f"{mylocalpath}\\games_verify\\" + pgamefilename + ".json", f"{mylocalpath}\\positions\\" + ppositionfilename + "_reversed.json")
 
+mylocalpath = "C:\\Users\\Evert Jan\\pythonprojects\\chesspython_nogithub"
 mychessgame = chessgame()
 
 #ProcessTestPosition(mychessgame, "maingame", "mainposition")
 #ProcessTestPosition(mychessgame, "maingame", "whitepawn")
-ProcessTestPosition(mychessgame, "maingame", "blackpawn")
+#ProcessTestPosition(mychessgame, "maingame", "blackpawn")
 #ProcessTestPosition(mychessgame, "maingame", "blackcastle")
 #ProcessTestPosition(mychessgame, "maingame", "whitepromote")
 #ProcessTestPosition(mychessgame, "maingame", "blackpromote")
 #ProcessTestPosition(mychessgame, "maingame", "testposition")
 
-#SwapPosition(mychessgame, "maingame", "whitepawn")
-Test(mychessgame, "maingame", "mate_03")
-Test(mychessgame, "maingame", "mate_03_reversed")
+#SwapPosition(mychessgame, "maingame", "mate_in_2_for_white")
+Test(mychessgame, "maingame", "mate_in_4_for_black_BN")

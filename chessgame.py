@@ -47,7 +47,8 @@ class chessgame:
     def LoadPiece(self, ppiecename):
         mytype = chesspiecetype()
         mytype.LoadFromJsonFile(".\\piecedefinitions\\" + ppiecename + ".json")
-        mytype.SaveAsJsonFile(".\\piecedefinitions_verify\\" + ppiecename + ".json")
+        mylocalpath = "C:\\Users\\Evert Jan\\pythonprojects\\chesspython_nogithub"
+        mytype.SaveAsJsonFile(f"{mylocalpath}\\piecedefinitions_verify\\" + ppiecename + ".json")
         self.piecetypes.append(mytype)
 #---------------------------------------------------------------------------------------------------------
     def ExecuteMove(self, pposition, pmove):

@@ -102,7 +102,7 @@ def CreateRandom_main():
         mymvstr = "No move"
     print(f"Result of evaluation : {myval} {mymvstr}")
 
-    mychessgame.SaveAsJsonFile(".\\games_verify\\setup01.json", ".\\positions_verify\\random_01.json")
+    mychessgame.SaveAsJsonFile(f"{mylocalpath}\\games_verify\\setup01.json", f"{mylocalpath}\\positions_verify\\random_01.json")
 
     myval, mymv, _ = mychessgame.Calculation_n_plies(mychessgame.mainposition, 4)
     try:
@@ -133,7 +133,7 @@ def CreateHunter_main():
         print(f"Result of evaluation : {myval} {mymvstr}")
 
         myseq += 1
-        mychessgame.SaveAsJsonFile(".\\games_verify\\setup01.json", f".\\positions_verify\\huntermate_{myseq}.json")
+        mychessgame.SaveAsJsonFile(f"{mylocalpath}\\games_verify\\setup01.json", f"{mylocalpath}\\positions_verify\\huntermate_{myseq}.json")
 
         print(f"Starting deeper calculation on this one {datetime.now()}")
         myval2, mymv, _ = mychessgame.Calculation_n_plies(mychessgame.mainposition, 7)
@@ -144,9 +144,11 @@ def CreateHunter_main():
         print(f"Result of evaluation : {myval2} {mymvstr}")
         print(f"Ended the deeper calculation {datetime.now()}")
 
+mylocalpath = "C:\\Users\\Evert Jan\\pythonprojects\\chesspython_nogithub"
+
 mychessgame = chessgame()
 
-mychessgame.LoadFromJsonFile(".\\games\\setup01.json", ".\\positions\\empty8x8.json")
-mychessgame.SaveAsJsonFile(".\\games_verify\\setup01.json", ".\\positions_verify\\empty8x8.json")
+mychessgame.LoadFromJsonFile(".\\games\\setup01.json", f"{mylocalpath}\\positions\\empty8x8.json")
+mychessgame.SaveAsJsonFile(f"{mylocalpath}\\games_verify\\setup01.json", f"{mylocalpath}\\positions_verify\\empty8x8.json")
 
 CreateHunter_main()
