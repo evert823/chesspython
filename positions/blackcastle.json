@@ -9,7 +9,7 @@
                      "blackkingsiderookhasmoved": false,
                      "blackqueensiderookhasmoved": false},
     "squares": [
-        " .| .| .| .| .| .|-R|-K",
+        "-R| .| .| .|-K| .| .|-R",
         " .| .| .| .| .| .| .| .",
         " .| .| .| .| .| .| .| .",
         " .| .| .| .| .| .| .| .",
