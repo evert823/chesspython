@@ -1,17 +1,17 @@
 from chessgame import chessgame
 from datetime import datetime
 
-def Test(pchessgame, pgamefilename, ppositionfilename):
+def Test(pchessgame, pgamefilename, ppositionfilename, n_plies):
     pchessgame.LoadFromJsonFile(".\\games\\" + pgamefilename + ".json", f"{mylocalpath}\\positions\\" + ppositionfilename + ".json")
     pchessgame.SaveAsJsonFile(f"{mylocalpath}\\games_verify\\" + pgamefilename + ".json", f"{mylocalpath}\\positions_verify\\" + ppositionfilename + ".json")
     
     print(datetime.now())
-    myval, mymv, _ = pchessgame.Calculation_n_plies(pchessgame.mainposition, 4)
+    myval, mymv, _ = pchessgame.Calculation_n_plies(pchessgame.mainposition, n_plies)
     try:
         mymvstr = mymv.ShortNotation(pchessgame.piecetypes)
     except:
         mymvstr = "No move"
-    print(f"Result of evaluation {ppositionfilename}: {myval} {mymvstr}")
+    print(f"Result of evaluation {n_plies} plies {ppositionfilename}: {myval} {mymvstr}")
     print(datetime.now())
 
 
@@ -51,5 +51,5 @@ mychessgame = chessgame()
 #ProcessTestPosition(mychessgame, "maingame", "blackpromote")
 #ProcessTestPosition(mychessgame, "maingame", "testposition")
 
-#SwapPosition(mychessgame, "maingame", "mate_in_2_for_white")
-Test(mychessgame, "maingame", "mate_in_4_for_black_BN")
+#SwapPosition(mychessgame, "maingame", "Archbishop_mate_04_black")
+Test(mychessgame, "maingame", "Archbishop_mate_04_black", 8)

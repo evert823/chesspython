@@ -604,7 +604,7 @@ class chessposition:
         return MoveList
 #---------------------------------------------------------------------------------------------------------
     def StaticEvaluation(self, ppiecetypes):
-        piecevalues = [13.0, 3.1, 4.0, 3.8, 4.0, 3.0, 3.4, 1.0, 9.1, 5.0]
+        piecevalues = [8.0, 3.1, 8.5, 4.0, 3.8, 4.0, 3.0, 3.4, 1.0, 9.1, 5.0]
         materialbalance = 0.0
         myresult = 0.0
         #Locate white and black King:
