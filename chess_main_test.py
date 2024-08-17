@@ -41,7 +41,7 @@ def SwapPosition(pchessgame, pgamefilename, ppositionfilename):
     pchessgame.SaveAsJsonFile(f"{mylocalpath}\\games_verify\\" + pgamefilename + ".json", f"{mylocalpath}\\positions\\" + ppositionfilename + "_reversed.json")
 
 mylocalpath = "C:\\Users\\Evert Jan\\pythonprojects\\chesspython_nogithub"
-mychessgame = chessgame()
+mychessgame = chessgame(mylocalpath)
 
 #ProcessTestPosition(mychessgame, "maingame", "mainposition")
 #ProcessTestPosition(mychessgame, "maingame", "whitepawn")

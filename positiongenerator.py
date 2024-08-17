@@ -145,8 +145,7 @@ def CreateHunter_main():
         print(f"Ended the deeper calculation {datetime.now()}")
 
 mylocalpath = "C:\\Users\\Evert Jan\\pythonprojects\\chesspython_nogithub"
-
-mychessgame = chessgame()
+mychessgame = chessgame(mylocalpath)
 
 mychessgame.LoadFromJsonFile(".\\games\\setup01.json", f"{mylocalpath}\\positions\\empty8x8.json")
 mychessgame.SaveAsJsonFile(f"{mylocalpath}\\games_verify\\setup01.json", f"{mylocalpath}\\positions_verify\\empty8x8.json")

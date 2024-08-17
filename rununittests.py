@@ -144,7 +144,25 @@ def TestMate_n(pchessgame, pgamefilename, ppositionfilename, mate_in_n=2):
     else:
         raise Exception(f"Mate expected, but there was no mate.")
 
-mychessgame = chessgame()
+def BaselinePerformance(pchessgame, pgamefilename, ppositionfilename, n_plies, baseline_seconds):
+
+    pchessgame.LoadFromJsonFile(".\\games\\" + pgamefilename + ".json", ".\\unittests\\" + ppositionfilename + ".json")
+
+    print(f"Executing performance test for {ppositionfilename} baseline {baseline_seconds}")
+
+    startdatetime = datetime.now()
+    myval, mymv, _ = pchessgame.Calculation_n_plies(pchessgame.mainposition, -100.0, 100.0, n_plies)
+    enddatetime = datetime.now()
+    d = enddatetime - startdatetime
+    secondsneeded = d.total_seconds()
+
+    print(f"secondsneeded for {ppositionfilename}: {secondsneeded} baseline {baseline_seconds}")
+    if secondsneeded > baseline_seconds:
+        raise Exception(f"Performance of calculation under acceptable levels")
+
+
+mylocalpath = "C:\\Users\\Evert Jan\\pythonprojects\\chesspython_nogithub"
+mychessgame = chessgame(mylocalpath)
 
 print(datetime.now())
 TestCastle(mychessgame, "maingame", "01A_castle_white")
@@ -189,5 +207,8 @@ TestMate_n(mychessgame, "maingame", "06C_mate_2_white_01", 2)
 TestMate_n(mychessgame, "maingame", "06C_mate_2_white_02", 2)
 TestMate_n(mychessgame, "maingame", "06C_mate_2_black_01", 2)
 TestMate_n(mychessgame, "maingame", "06C_mate_2_black_02", 2)
+BaselinePerformance(mychessgame, "maingame", "07A_mate_4_white_BN", 8, 25)
+BaselinePerformance(mychessgame, "maingame", "07A_mate_4_black_BN", 8, 25)
+print("ALL UNITTESTS PASSED")
 
 print(datetime.now())

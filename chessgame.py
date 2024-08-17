@@ -5,12 +5,13 @@ from chessmove import chessmove
 import copy
 
 class chessgame:
-    def __init__(self):
+    def __init__(self, pworkpath):
         self.boardwidth = -1
         self.boardheight = -1
         self.piecetypes = []
 
         self.mainposition = chessposition()
+        self.workpath = pworkpath
 #---------------------------------------------------------------------------------------------------------
     def LoadFromJsonFile(self, pfilename, ppositionfilename):
         #Load from json file and convert to class structure
@@ -22,7 +23,7 @@ class chessgame:
 
         self.piecetypes.clear()
         for p in gamedict["piecetypes"]:
-            self.LoadPiece(p)
+            self.LoadPiece(p, self.workpath)
 
         self.mainposition.LoadFromJsonFile(ppositionfilename, self.piecetypes)
         self.boardwidth = self.mainposition.boardwidth
@@ -44,11 +45,10 @@ class chessgame:
 
         self.mainposition.SaveAsJsonFile(ppositionfilename, self.piecetypes)
 #---------------------------------------------------------------------------------------------------------
-    def LoadPiece(self, ppiecename):
+    def LoadPiece(self, ppiecename, pworkpath):
         mytype = chesspiecetype()
         mytype.LoadFromJsonFile(".\\piecedefinitions\\" + ppiecename + ".json")
-        mylocalpath = "C:\\Users\\Evert Jan\\pythonprojects\\chesspython_nogithub"
-        mytype.SaveAsJsonFile(f"{mylocalpath}\\piecedefinitions_verify\\" + ppiecename + ".json")
+        mytype.SaveAsJsonFile(f"{pworkpath}\\piecedefinitions_verify\\" + ppiecename + ".json")
         self.piecetypes.append(mytype)
 #---------------------------------------------------------------------------------------------------------
     def ExecuteMove(self, pposition, pmove):
