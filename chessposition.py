@@ -604,7 +604,6 @@ class chessposition:
         return MoveList
 #---------------------------------------------------------------------------------------------------------
     def StaticEvaluation(self, ppiecetypes):
-        piecevalues = [8.0, 3.1, 8.5, 4.0, 3.8, 4.0, 3.0, 3.4, 1.0, 9.1, 5.0]
         materialbalance = 0.0
         myresult = 0.0
         #Locate white and black King:
@@ -624,13 +623,13 @@ class chessposition:
                             i_kw = i
                             j_kw = j
                         else:
-                            materialbalance += piecevalues[pi]
+                            materialbalance += chesshelp.chesshelp.PieceType2Value(pi, ppiecetypes)
                     else:
                         if pt.name == "King" and pt.IsRoyal == True:
                             i_kb = i
                             j_kb = j
                         else:
-                            materialbalance -= piecevalues[pi]
+                            materialbalance -= chesshelp.chesshelp.PieceType2Value(pi, ppiecetypes)
 
         if i_kw == -1 and i_kb == -1:
             myresult = -100.0 * self.colourtomove
