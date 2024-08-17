@@ -7,8 +7,6 @@ from datetime import datetime
 
 class chessgame:
     def __init__(self, pworkpath):
-        self.boardwidth = -1
-        self.boardheight = -1
         self.piecetypes = []
 
         self.mainposition = chessposition()
@@ -22,23 +20,17 @@ class chessgame:
         gamefile = open(pfilename, 'r')
         gamedict = json.load(gamefile)
         gamefile.close()
-        self.boardwidth = gamedict["boardwidth"]
-        self.boardheight = gamedict["boardheight"]
 
         self.piecetypes.clear()
         for p in gamedict["piecetypes"]:
             self.LoadPiece(p, self.workpath)
 
         self.mainposition.LoadFromJsonFile(ppositionfilename, self.piecetypes)
-        self.boardwidth = self.mainposition.boardwidth
-        self.boardheight = self.mainposition.boardheight
 #---------------------------------------------------------------------------------------------------------
     def SaveAsJsonFile(self, pfilename, ppositionfilename):
         #Convert class structure to json and save as json file
         gamefile = open(pfilename, 'w')
         gamedict = {}
-        gamedict["boardwidth"] = self.boardwidth
-        gamedict["boardheight"] = self.boardheight
 
         gamedict["piecetypes"] = []
         for p in self.piecetypes:
