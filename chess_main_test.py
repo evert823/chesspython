@@ -57,4 +57,4 @@ mychessgame = chessgame(mylocalpath)
 #SwapPosition(mychessgame, "maingame", "08A_stalemate_2_white")
 #Test(mychessgame, "maingame", "mate_in_4_for_white_hard_chesscom", 8) #several days !!!
 
-Test(mychessgame, "maingame", "testposition", 10)
+Test(mychessgame, "maingame", "testposition", 6)
