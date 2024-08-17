@@ -102,7 +102,7 @@ def TestCheck(pchessgame, pgamefilename, ppositionfilename):
 
 def TestStalemate(pchessgame, pgamefilename, ppositionfilename):
     pchessgame.LoadFromJsonFile(".\\games\\" + pgamefilename + ".json", ".\\unittests\\" + ppositionfilename + ".json")
-    myval, mymv, _ = pchessgame.Calculation_n_plies(pchessgame.mainposition, 1)
+    myval, mymv, _ = pchessgame.Calculation_n_plies(pchessgame.mainposition, -100.0, 100.0, 1)
 
     if myval == 0.0:
         pass
@@ -111,7 +111,7 @@ def TestStalemate(pchessgame, pgamefilename, ppositionfilename):
 
 def TestMate(pchessgame, pgamefilename, ppositionfilename):
     pchessgame.LoadFromJsonFile(".\\games\\" + pgamefilename + ".json", ".\\unittests\\" + ppositionfilename + ".json")
-    myval, mymv, _ = pchessgame.Calculation_n_plies(pchessgame.mainposition, 1)
+    myval, mymv, _ = pchessgame.Calculation_n_plies(pchessgame.mainposition, -100.0, 100.0, 1)
 
     if ((myval == 100.0 and pchessgame.mainposition.colourtomove == -1) or
         (myval == -100.0 and pchessgame.mainposition.colourtomove == 1)):
@@ -129,7 +129,7 @@ def TestMate_n(pchessgame, pgamefilename, ppositionfilename, mate_in_n=2):
     pchessgame.LoadFromJsonFile(".\\games\\" + pgamefilename + ".json", ".\\unittests\\" + ppositionfilename + ".json")
 
     startdatetime = datetime.now()
-    myval, mymv, _ = pchessgame.Calculation_n_plies(pchessgame.mainposition, n_plies)
+    myval, mymv, _ = pchessgame.Calculation_n_plies(pchessgame.mainposition, -100.0, 100.0, n_plies)
     enddatetime = datetime.now()
 
     d = enddatetime - startdatetime

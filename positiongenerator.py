@@ -94,7 +94,7 @@ def CreateRandom_main():
         ClearBoard(mychessgame.mainposition, mychessgame.boardwidth, mychessgame.boardheight)
         CreateOneRandomPosition(mychessgame.mainposition, mychessgame.piecetypes, mychessgame.boardwidth, mychessgame.boardheight)
         TuneCastlingInfo(mychessgame.mainposition, mychessgame.piecetypes)
-        myval, mymv, _ = mychessgame.Calculation_n_plies(mychessgame.mainposition, 1)
+        myval, mymv, _ = mychessgame.Calculation_n_plies(mychessgame.mainposition, -100.0, 100.0, 1)
 
     try:
         mymvstr = mymv.ShortNotation(mychessgame.piecetypes)
@@ -104,7 +104,7 @@ def CreateRandom_main():
 
     mychessgame.SaveAsJsonFile(f"{mylocalpath}\\games_verify\\setup01.json", f"{mylocalpath}\\positions_verify\\random_01.json")
 
-    myval, mymv, _ = mychessgame.Calculation_n_plies(mychessgame.mainposition, 4)
+    myval, mymv, _ = mychessgame.Calculation_n_plies(mychessgame.mainposition, -100.0, 100.0, 4)
     try:
         mymvstr = mymv.ShortNotation(mychessgame.piecetypes)
     except:
@@ -124,7 +124,7 @@ def CreateHunter_main():
             ClearBoard(mychessgame.mainposition, mychessgame.boardwidth, mychessgame.boardheight)
             CreateHunterEndgame(mychessgame.mainposition, mychessgame.piecetypes, mychessgame.boardwidth, mychessgame.boardheight)
             TuneCastlingInfo(mychessgame.mainposition, mychessgame.piecetypes)
-            myval, mymv, _ = mychessgame.Calculation_n_plies(mychessgame.mainposition, 3)
+            myval, mymv, _ = mychessgame.Calculation_n_plies(mychessgame.mainposition, -100.0, 100.0, 3)
 
         try:
             mymvstr = mymv.ShortNotation(mychessgame.piecetypes)
@@ -136,7 +136,7 @@ def CreateHunter_main():
         mychessgame.SaveAsJsonFile(f"{mylocalpath}\\games_verify\\setup01.json", f"{mylocalpath}\\positions_verify\\huntermate_{myseq}.json")
 
         print(f"Starting deeper calculation on this one {datetime.now()}")
-        myval2, mymv, _ = mychessgame.Calculation_n_plies(mychessgame.mainposition, 7)
+        myval2, mymv, _ = mychessgame.Calculation_n_plies(mychessgame.mainposition, -100.0, 100.0, 7)
         try:
             mymvstr = mymv.ShortNotation(mychessgame.piecetypes)
         except:

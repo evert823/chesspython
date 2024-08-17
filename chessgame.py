@@ -111,7 +111,7 @@ class chessgame:
 
         return myresultpos
 #---------------------------------------------------------------------------------------------------------
-    def Calculation_n_plies(self, pposition, n_plies):
+    def Calculation_n_plies(self, pposition, alpha, beta, n_plies):
         #response must be tuple len 3 (x, y, z)
         #x = evaluation float
         #y = chessmove object instance
@@ -137,25 +137,27 @@ class chessgame:
         movelist = pposition.Position2MoveList(self.piecetypes)
         subresults = []
 
-        if pposition.colourtomove == 1:
-            goodenoughstopvalue = 100.0
-        else:
-            goodenoughstopvalue = -100.0
+        new_alpha = alpha
+        new_beta = beta
 
         noescapecheck = True
         for i in range(len(movelist)):
             #print(movelist[i].ShortNotation(self.piecetypes))
             newpos = self.ExecuteMove(pposition, movelist[i])
-            newvalue, _, me_in_check = self.Calculation_n_plies(newpos, n_plies - 1)
+            newvalue, _, me_in_check = self.Calculation_n_plies(newpos, new_alpha, new_beta, n_plies - 1)
             if me_in_check == False:
                 noescapecheck = False
             subresults.append((i, newvalue))
 
             if pposition.colourtomove == 1:
-                if newvalue >= goodenoughstopvalue:
+                if new_alpha < newvalue:
+                    new_alpha = newvalue
+                if newvalue >= new_beta:
                     break
             else:
-                if newvalue <= goodenoughstopvalue:
+                if new_beta > newvalue:
+                    new_beta = newvalue
+                if newvalue <= new_alpha:
                     break
 
         #Mate
