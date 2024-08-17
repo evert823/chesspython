@@ -3,6 +3,7 @@ from chesspiecetype import chesspiecetype
 from chessposition import chessposition
 from chessmove import chessmove
 import copy
+from datetime import datetime
 
 class chessgame:
     def __init__(self, pworkpath):
@@ -12,6 +13,9 @@ class chessgame:
 
         self.mainposition = chessposition()
         self.workpath = pworkpath
+        self.presort_when_n_plies_gt = 7
+        self.presort_using_n_plies = 3
+        self.display_when_n_plies_gt = 8
 #---------------------------------------------------------------------------------------------------------
     def LoadFromJsonFile(self, pfilename, ppositionfilename):
         #Load from json file and convert to class structure
@@ -111,6 +115,20 @@ class chessgame:
 
         return myresultpos
 #---------------------------------------------------------------------------------------------------------
+    def DisplayMove(self, pmove):
+        try:
+            s = pmove.ShortNotation(self.piecetypes)
+        except:
+            s = "NA"
+        return s
+#---------------------------------------------------------------------------------------------------------
+    def DisplayMoves(self, pmovelist):
+        sl = []
+        for mv in pmovelist:
+            sl.append(self.DisplayMove(mv))
+        s = ",".join(sl)
+        return s
+#---------------------------------------------------------------------------------------------------------
     def Calculation_n_plies(self, pposition, alpha, beta, n_plies):
         #response must be tuple len 3 (x, y, z)
         #x = evaluation float
@@ -135,14 +153,39 @@ class chessgame:
             return (evalresult, None, False)
 
         movelist = pposition.Position2MoveList(self.piecetypes)
-        subresults = []
 
         new_alpha = alpha
         new_beta = beta
 
+
+        #presort BEGIN
+        if n_plies > self.presort_when_n_plies_gt:
+            print(f"List before sorting : {self.DisplayMoves(movelist)}")
+            movelist2 = copy.deepcopy(movelist)
+            subresults_presort = []
+            for i in range(len(movelist2)):
+                newpos = self.ExecuteMove(pposition, movelist2[i])
+                newvalue, _, me_in_check = self.Calculation_n_plies(newpos, new_alpha, new_beta, self.presort_using_n_plies)
+                subresults_presort.append((i, newvalue))
+
+            if pposition.colourtomove == 1:
+                res_sorted_presort = sorted(subresults_presort, key=lambda tup: tup[1], reverse=True)
+            else:
+                res_sorted_presort = sorted(subresults_presort, key=lambda tup: tup[1], reverse=False)
+
+            movelist.clear()
+            for i in range(len(res_sorted_presort)):
+                mv = copy.deepcopy(movelist2[res_sorted_presort[i][0]])
+                movelist.append(mv)
+            print(f"List after sorting : {self.DisplayMoves(movelist)}")
+        #presort END
+
+        subresults = []
+
         noescapecheck = True
         for i in range(len(movelist)):
-            #print(movelist[i].ShortNotation(self.piecetypes))
+            if n_plies > self.display_when_n_plies_gt:
+                print(f"{datetime.now()} n_plies {n_plies} checking move {self.DisplayMove(movelist[i])}")
             newpos = self.ExecuteMove(pposition, movelist[i])
             newvalue, _, me_in_check = self.Calculation_n_plies(newpos, new_alpha, new_beta, n_plies - 1)
             if me_in_check == False:

@@ -5,7 +5,10 @@ def Test(pchessgame, pgamefilename, ppositionfilename, n_plies):
     pchessgame.LoadFromJsonFile(".\\games\\" + pgamefilename + ".json", f"{mylocalpath}\\positions\\" + ppositionfilename + ".json")
     pchessgame.SaveAsJsonFile(f"{mylocalpath}\\games_verify\\" + pgamefilename + ".json", f"{mylocalpath}\\positions_verify\\" + ppositionfilename + ".json")
     
+    pchessgame.display_when_n_plies_gt = n_plies - 2
+
     print(datetime.now())
+    print(f"Running evaluation {n_plies} plies {ppositionfilename} ...")
     myval, mymv, _ = pchessgame.Calculation_n_plies(pchessgame.mainposition, -100.0, 100.0, n_plies)
     try:
         mymvstr = mymv.ShortNotation(pchessgame.piecetypes)
@@ -51,6 +54,5 @@ mychessgame = chessgame(mylocalpath)
 #ProcessTestPosition(mychessgame, "maingame", "blackpromote")
 #ProcessTestPosition(mychessgame, "maingame", "testposition")
 
-#SwapPosition(mychessgame, "maingame", "Archbishop_mate_04_black")
-Test(mychessgame, "maingame", "mate_in_4_for_black_BN", 8)
-Test(mychessgame, "maingame", "mate_in_4_for_white_BN", 8)
+#SwapPosition(mychessgame, "maingame", "mate_in_5_for_white_BN")
+Test(mychessgame, "maingame", "mate_in_4_for_white_hard_chesscom", 8)
