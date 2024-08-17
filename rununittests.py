@@ -144,6 +144,22 @@ def TestMate_n(pchessgame, pgamefilename, ppositionfilename, mate_in_n=2):
     else:
         raise Exception(f"Mate expected, but there was no mate.")
 
+def TestStalemate_n(pchessgame, pgamefilename, ppositionfilename, stalemate_in_n=2):
+    if stalemate_in_n in (1, 2, 3, 4):
+        pass
+    else:
+        n = 2
+    n_plies = (stalemate_in_n * 2) + 1
+
+    pchessgame.LoadFromJsonFile(".\\games\\" + pgamefilename + ".json", ".\\unittests\\" + ppositionfilename + ".json")
+
+    myval, mymv, _ = pchessgame.Calculation_n_plies(pchessgame.mainposition, -100.0, 100.0, n_plies)
+
+    if myval == 0.0:
+        pass
+    else:
+        raise Exception(f"Stalemate expected, but there was no mate.")
+
 def BaselinePerformance(pchessgame, pgamefilename, ppositionfilename, n_plies, baseline_seconds):
 
     pchessgame.LoadFromJsonFile(".\\games\\" + pgamefilename + ".json", ".\\unittests\\" + ppositionfilename + ".json")
@@ -207,6 +223,8 @@ TestMate_n(mychessgame, "maingame", "06C_mate_2_white_01", 2)
 TestMate_n(mychessgame, "maingame", "06C_mate_2_white_02", 2)
 TestMate_n(mychessgame, "maingame", "06C_mate_2_black_01", 2)
 TestMate_n(mychessgame, "maingame", "06C_mate_2_black_02", 2)
+TestStalemate_n(mychessgame, "maingame", "08A_stalemate_2_white", 2)
+TestStalemate_n(mychessgame, "maingame", "08A_stalemate_2_black", 2)
 BaselinePerformance(mychessgame, "maingame", "07A_mate_4_white_BN", 8, 25)
 BaselinePerformance(mychessgame, "maingame", "07A_mate_4_black_BN", 8, 25)
 print("ALL UNITTESTS PASSED")

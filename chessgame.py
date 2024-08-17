@@ -160,7 +160,8 @@ class chessgame:
 
         #presort BEGIN
         if n_plies > self.presort_when_n_plies_gt:
-            print(f"List before sorting : {self.DisplayMoves(movelist)}")
+            if n_plies > self.display_when_n_plies_gt:
+                print(f"List before sorting : {self.DisplayMoves(movelist)}")
             movelist2 = copy.deepcopy(movelist)
             subresults_presort = []
             for i in range(len(movelist2)):
@@ -177,7 +178,8 @@ class chessgame:
             for i in range(len(res_sorted_presort)):
                 mv = copy.deepcopy(movelist2[res_sorted_presort[i][0]])
                 movelist.append(mv)
-            print(f"List after sorting : {self.DisplayMoves(movelist)}")
+            if n_plies > self.display_when_n_plies_gt:
+                print(f"List after sorting : {self.DisplayMoves(movelist)}")
         #presort END
 
         subresults = []
@@ -185,7 +187,7 @@ class chessgame:
         noescapecheck = True
         for i in range(len(movelist)):
             if n_plies > self.display_when_n_plies_gt:
-                print(f"{datetime.now()} n_plies {n_plies} checking move {self.DisplayMove(movelist[i])}")
+                print(f"{datetime.now()} n_plies {n_plies} checking move {self.DisplayMove(movelist[i])} alpha {new_alpha} beta {new_beta}")
             newpos = self.ExecuteMove(pposition, movelist[i])
             newvalue, _, me_in_check = self.Calculation_n_plies(newpos, new_alpha, new_beta, n_plies - 1)
             if me_in_check == False:
