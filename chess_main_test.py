@@ -5,7 +5,7 @@ def Test(pchessgame, pgamefilename, ppositionfilename, n_plies):
     pchessgame.LoadFromJsonFile(".\\games\\" + pgamefilename + ".json", f"{mylocalpath}\\positions\\" + ppositionfilename + ".json")
     pchessgame.SaveAsJsonFile(f"{mylocalpath}\\games_verify\\" + pgamefilename + ".json", f"{mylocalpath}\\positions_verify\\" + ppositionfilename + ".json")
     
-    #pchessgame.display_when_n_plies_gt = n_plies - 2
+    pchessgame.display_when_n_plies_gt = n_plies - 3
 
     print(datetime.now())
     print(f"Running evaluation {n_plies} plies {ppositionfilename} ...")
@@ -55,6 +55,5 @@ mychessgame = chessgame(mylocalpath)
 #ProcessTestPosition(mychessgame, "maingame", "testposition")
 
 #SwapPosition(mychessgame, "maingame", "08A_stalemate_2_white")
-#Test(mychessgame, "maingame", "mate_in_4_for_white_hard_chesscom", 8) #several days !!!
-
-Test(mychessgame, "maingame", "testposition", 0)
+Test(mychessgame, "maingame", "mate_in_4_for_white_hard_chesscom", 8) #several days !!!
+#Test(mychessgame, "maingame", "testposition", 0)

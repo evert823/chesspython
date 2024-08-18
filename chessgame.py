@@ -11,9 +11,19 @@ class chessgame:
 
         self.mainposition = chessposition()
         self.workpath = pworkpath
+
+        now = datetime.now()
+        dt_string = now.strftime("%Y_%m_%d_%H_%M_%S")
+        self.logfilename = f"{pworkpath}\\log\\chessgamelog_{dt_string}.log"
+
         self.presort_when_n_plies_gt = 7
         self.presort_using_n_plies = 3
         self.display_when_n_plies_gt = 8
+#---------------------------------------------------------------------------------------------------------
+    def writelog(self, pmessage):
+        file = open(self.logfilename, 'a')
+        file.write(pmessage + "\n")
+        file.close()
 #---------------------------------------------------------------------------------------------------------
     def LoadFromJsonFile(self, pfilename, ppositionfilename):
         #Load from json file and convert to class structure
@@ -153,7 +163,7 @@ class chessgame:
         #presort BEGIN
         if n_plies > self.presort_when_n_plies_gt:
             if n_plies > self.display_when_n_plies_gt:
-                print(f"List before sorting : {self.DisplayMoves(movelist)}")
+                self.writelog(f"List before sorting : {self.DisplayMoves(movelist)}")
             movelist2 = copy.deepcopy(movelist)
             subresults_presort = []
             for i in range(len(movelist2)):
@@ -171,7 +181,7 @@ class chessgame:
                 mv = copy.deepcopy(movelist2[res_sorted_presort[i][0]])
                 movelist.append(mv)
             if n_plies > self.display_when_n_plies_gt:
-                print(f"List after sorting : {self.DisplayMoves(movelist)}")
+                self.writelog(f"List after sorting : {self.DisplayMoves(movelist)}")
         #presort END
 
         subresults = []
@@ -179,7 +189,7 @@ class chessgame:
         noescapecheck = True
         for i in range(len(movelist)):
             if n_plies > self.display_when_n_plies_gt:
-                print(f"{datetime.now()} n_plies {n_plies} checking move {self.DisplayMove(movelist[i])} alpha {new_alpha} beta {new_beta}")
+                self.writelog(f"{datetime.now()} n_plies {n_plies} checking move {self.DisplayMove(movelist[i])} alpha {new_alpha} beta {new_beta}")
             newpos = self.ExecuteMove(pposition, movelist[i])
             newvalue, _, me_in_check = self.Calculation_n_plies(newpos, new_alpha, new_beta, n_plies - 1)
             if me_in_check == False:
