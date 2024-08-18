@@ -37,6 +37,7 @@ class chessposition:
             for i in range(self.boardwidth):
                 myrank.append(0)
             self.squares.append(myrank)
+        self.ClearNonPersistent()
 #---------------------------------------------------------------------------------------------------------
     def LoadFromJsonFile(self, pfilename, ppiecetypes):
         #Load from json file and convert to class structure
@@ -114,6 +115,63 @@ class chessposition:
 
         json.dump(positiondict, positionfile, indent=4)
         positionfile.close()
+#---------------------------------------------------------------------------------------------------------
+    def PositionFromFEN(self, pfen, ppiecetypes):
+        fenparts0 = pfen.split(" ")
+        fenparts = fenparts0[0].split("/")
+        
+        self.boardwidth = 8
+        self.boardheight = 8
+
+        if fenparts0[1].lower() == "w":
+            self.colourtomove = 1
+        else:
+            self.colourtomove = -1
+
+        self.ResetBoardsize(self.boardwidth, self.boardheight)
+        self.precedingmove = (-1, -1, -1, -1)
+        self.whitekinghasmoved = True
+        self.whitekingsiderookhasmoved = True
+        self.whitequeensiderookhasmoved = True
+        self.blackkinghasmoved = True
+        self.blackkingsiderookhasmoved = True
+        self.blackqueensiderookhasmoved = True
+
+        for j in range(len(fenparts)):
+            rj = (self.boardheight - 1) - j
+            fp = fenparts[j]
+            csqi = 0
+            for ci in range(len(fp)):
+                if fp[ci].isnumeric() == True:
+                    csqi += int(fp[ci])
+                else:
+                    self.squares[rj][csqi] = chesshelp.chesshelp.Str2PieceType4FEN(fp[ci], ppiecetypes)
+                    csqi += 1
+#---------------------------------------------------------------------------------------------------------
+    def PositionAsFEN(self, ppiecetypes):
+        fenparts = []
+        for j in range(self.boardheight):
+            rj = (self.boardheight - 1) - j
+            vacantcount = 0
+            fenpart = ""
+            for i in range(self.boardwidth):
+                if self.squares[rj][i] != 0:
+                    if vacantcount != 0:
+                        fenpart += str(vacantcount)
+                        vacantcount = 0
+                    mysymbol = chesshelp.chesshelp.PieceType2Str4FEN(self.squares[rj][i], ppiecetypes)
+                    fenpart += mysymbol
+                if self.squares[rj][i] == 0:
+                    vacantcount += 1
+            if vacantcount != 0:
+                fenpart += str(vacantcount)
+            fenparts.append(fenpart)
+        fen = "/".join(fenparts)
+        if self.colourtomove == 1:
+            fen += " w"
+        else:
+            fen += " b"
+        return fen
 #---------------------------------------------------------------------------------------------------------
     def WhiteKingIsInCheck(self):
         if self.colourtomove == 1:

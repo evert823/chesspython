@@ -19,6 +19,25 @@ class chesshelp:
         return "."
 #---------------------------------------------------------------------------------------------------------
     @staticmethod
+    def PieceType2Str4FEN(ptypenr, ppiecetypes):
+        if ptypenr > 0:
+            i = ptypenr - 1
+            return ppiecetypes[i].symbol.upper()
+        if ptypenr < 0:
+            i = (ptypenr * -1) - 1
+            return ppiecetypes[i].symbol.lower()
+        return ""
+#---------------------------------------------------------------------------------------------------------
+    @staticmethod
+    def Str2PieceType4FEN(psymbol, ppiecetypes):
+        for i in range(len(ppiecetypes)):
+            if psymbol == ppiecetypes[i].symbol.upper():
+                return i + 1
+            if psymbol == ppiecetypes[i].symbol.lower():
+                return (i + 1) * -1
+        return 0
+#---------------------------------------------------------------------------------------------------------
+    @staticmethod
     def PieceType2Value(ptypenr, ppiecetypes):
         if ppiecetypes[ptypenr].name == "King":
             myvalue = 1000.0
