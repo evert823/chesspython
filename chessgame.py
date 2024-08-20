@@ -1,7 +1,6 @@
 import json
 from chesspiecetype import chesspiecetype
 from chessposition import chessposition
-from chessmove import chessmove
 import copy
 from datetime import datetime
 
