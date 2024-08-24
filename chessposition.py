@@ -461,8 +461,7 @@ class chessposition:
             includenonpromote = True
 
         if includenonpromote == True:
-            mv2 = copy.deepcopy(mv)
-            MoveList.append(mv2)            
+            MoveList.append(mv)
 
         if includepromote == True:
             for pi in range(len(ppiecetypes)):

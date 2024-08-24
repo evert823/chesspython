@@ -6,6 +6,7 @@ def Test(pchessgame, pgamefilename, ppositionfilename, n_plies):
     pchessgame.SaveAsJsonFile(f"{mylocalpath}\\games_verify\\" + pgamefilename + ".json", f"{mylocalpath}\\positions_verify\\" + ppositionfilename + ".json")
     
     pchessgame.display_when_n_plies_gt = n_plies - 2
+    pchessgame.presort_when_n_plies_gt = 6
 
     print(datetime.now())
     print(f"Running evaluation {n_plies} plies {ppositionfilename} ...")
@@ -69,4 +70,4 @@ mychessgame = chessgame(mylocalpath)
 #FEN2Json(mychessgame, "maingame", "loadedfromfen", "3k4/2n3q1/2n5/2p5/2K5/8/8/8 b")
 #Json2FEN(mychessgame, "maingame", "loadedfromfen")
 
-Test(mychessgame, "maingame", "mate_in_5_for_black_BN", 10)
+Test(mychessgame, "maingame", "mate_in_5_for_white_BN", 10)
