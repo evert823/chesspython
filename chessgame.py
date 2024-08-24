@@ -18,6 +18,16 @@ class chessgame:
         self.presort_when_n_plies_gt = 7
         self.presort_using_n_plies = 3
         self.display_when_n_plies_gt = 8
+        self.positionstack_size = 25
+        self.positionstack = []
+#---------------------------------------------------------------------------------------------------------
+    def init_positionstack(self):
+        self.positionstack.clear()
+        for i in range(self.positionstack_size):
+            mypos = chessposition()
+            mypos.ResetBoardsize(self.mainposition.boardwidth, self.mainposition.boardheight)
+            self.positionstack.append(mypos)
+        self.SynchronizePosition(self.mainposition, self.positionstack[0])
 #---------------------------------------------------------------------------------------------------------
     def writelog(self, pmessage):
         file = open(self.logfilename, 'a')
@@ -35,6 +45,7 @@ class chessgame:
             self.LoadPiece(p, self.workpath)
 
         self.mainposition.LoadFromJsonFile(ppositionfilename, self.piecetypes)
+        self.init_positionstack()
 #---------------------------------------------------------------------------------------------------------
     def SaveAsJsonFile(self, pfilename, ppositionfilename):
         #Convert class structure to json and save as json file
@@ -56,65 +67,83 @@ class chessgame:
         mytype.SaveAsJsonFile(f"{pworkpath}\\piecedefinitions_verify\\" + ppiecename + ".json")
         self.piecetypes.append(mytype)
 #---------------------------------------------------------------------------------------------------------
-    def ExecuteMove(self, pposition, pmove):
-        myresultpos = copy.deepcopy(pposition)
-        myresultpos.ClearNonPersistent()
+    def SynchronizePosition(self, frompos, topos):
+        #boardwidth MUST already be in sync
+        #boardheight MUST already be in sync
+        topos.colourtomove = frompos.colourtomove
+        #precedingmove will be set in ExecuteMove
+        topos.whitekinghasmoved = frompos.whitekinghasmoved
+        topos.whitekingsiderookhasmoved = frompos.whitekingsiderookhasmoved
+        topos.whitequeensiderookhasmoved = frompos.whitequeensiderookhasmoved
+        topos.blackkinghasmoved = frompos.blackkinghasmoved
+        topos.blackkingsiderookhasmoved = frompos.blackkingsiderookhasmoved
+        topos.blackqueensiderookhasmoved = frompos.blackqueensiderookhasmoved
+
+        for j in range(frompos.boardheight):
+            for i in range(frompos.boardwidth):
+                topos.squares[j][i] = frompos.squares[j][i]
+
+        topos.ClearNonPersistent()
+#---------------------------------------------------------------------------------------------------------
+    def ExecuteMove(self, posidx, pmove):
+        newposidx = posidx + 1
+        self.SynchronizePosition(self.positionstack[posidx], self.positionstack[newposidx])
 
         i1 = pmove.coordinates[0]
         j1 = pmove.coordinates[1]
         i2 = pmove.coordinates[2]
         j2 = pmove.coordinates[3]
 
-        myresultpos.precedingmove = (i1, j1, i2, j2)
+        self.positionstack[newposidx].precedingmove = (i1, j1, i2, j2)
 
         if pmove.PromoteToPiece != 0:
-            myresultpos.squares[j2][i2] = pmove.PromoteToPiece
+            self.positionstack[newposidx].squares[j2][i2] = pmove.PromoteToPiece
         else:
-            myresultpos.squares[j2][i2] = pmove.MovingPiece
-        myresultpos.squares[j1][i1] = 0
+            self.positionstack[newposidx].squares[j2][i2] = pmove.MovingPiece
+        self.positionstack[newposidx].squares[j1][i1] = 0
 
         #Set castling info for new position BEGIN
         pt = self.piecetypes[abs(pmove.MovingPiece) - 1]
-        i_k, i_qr, i_kr = pposition.LocateKingRooks4Castling(self.piecetypes)
 
         if pt.name == "King" and pt.IsRoyal == True:
-            if pposition.colourtomove == 1:
-                myresultpos.whitekinghasmoved = True
+            if self.positionstack[posidx].colourtomove == 1:
+                self.positionstack[newposidx].whitekinghasmoved = True
             else:
-                myresultpos.blackkinghasmoved = True
+                self.positionstack[newposidx].blackkinghasmoved = True
         elif pt.name == "Rook":
-            if pposition.colourtomove == 1:
+            _, i_qr, i_kr = self.positionstack[posidx].LocateKingRooks4Castling(self.piecetypes)
+            if self.positionstack[posidx].colourtomove == 1:
                 if i1 == i_qr:
-                    myresultpos.whitequeensiderookhasmoved = True
+                    self.positionstack[newposidx].whitequeensiderookhasmoved = True
                 elif i1 == i_kr:
-                    myresultpos.whitekingsiderookhasmoved = True
+                    self.positionstack[newposidx].whitekingsiderookhasmoved = True
             else:
                 if i1 == i_qr:
-                    myresultpos.blackqueensiderookhasmoved = True
+                    self.positionstack[newposidx].blackqueensiderookhasmoved = True
                 elif i1 == i_kr:
-                    myresultpos.blackkingsiderookhasmoved = True
+                    self.positionstack[newposidx].blackkingsiderookhasmoved = True
         #Set castling info for new position END
 
         if pmove.IsEnPassant == True:
             io1 = pmove.othercoordinates[0]
             jo1 = pmove.othercoordinates[1]
-            myresultpos.squares[jo1][io1] = 0
+            self.positionstack[newposidx].squares[jo1][io1] = 0
 
         if pmove.IsCastling == True:
             io1 = pmove.othercoordinates[0]
             jo1 = pmove.othercoordinates[1]
             io2 = pmove.othercoordinates[2]
             jo2 = pmove.othercoordinates[3]
-            otherpiece = myresultpos.squares[jo1][io1]
-            myresultpos.squares[jo1][io1] = 0
-            myresultpos.squares[jo2][io2] = otherpiece
+            otherpiece = self.positionstack[newposidx].squares[jo1][io1]
+            self.positionstack[newposidx].squares[jo1][io1] = 0
+            self.positionstack[newposidx].squares[jo2][io2] = otherpiece
 
-        if pposition.colourtomove == 1:
-            myresultpos.colourtomove = -1
+        if self.positionstack[posidx].colourtomove == 1:
+            self.positionstack[newposidx].colourtomove = -1
         else:
-            myresultpos.colourtomove = 1
+            self.positionstack[newposidx].colourtomove = 1
 
-        return myresultpos
+        return newposidx
 #---------------------------------------------------------------------------------------------------------
     def DisplayMove(self, pmove):
         try:
@@ -130,21 +159,21 @@ class chessgame:
         s = ",".join(sl)
         return s
 #---------------------------------------------------------------------------------------------------------
-    def Calculation_n_plies(self, pposition, alpha, beta, n_plies):
+    def Calculation_n_plies(self, posidx, alpha, beta, n_plies):
         #response must be tuple len 3 (x, y, z)
         #x = evaluation float
         #y = chessmove object instance
         #z = boolean Yes if opponent's King in check else No
 
-        evalresult = pposition.StaticEvaluation(self.piecetypes)
+        evalresult = self.positionstack[posidx].StaticEvaluation(self.piecetypes)
 
         if evalresult in (-100.0, 100.0):
             return (evalresult, None, False)
 
-        pposition.ScanAttacked(self.piecetypes)
+        self.positionstack[posidx].ScanAttacked(self.piecetypes)
 
-        if pposition.POKingIsInCheck() == True:
-            if pposition.colourtomove == 1:
+        if self.positionstack[posidx].POKingIsInCheck() == True:
+            if self.positionstack[posidx].colourtomove == 1:
                 evalresult = 100.0
             else:
                 evalresult = -100.0
@@ -153,7 +182,7 @@ class chessgame:
         if n_plies == 0:
             return (evalresult, None, False)
 
-        movelist = pposition.Position2MoveList(self.piecetypes)
+        movelist = self.positionstack[posidx].Position2MoveList(self.piecetypes)
 
         new_alpha = alpha
         new_beta = beta
@@ -166,11 +195,11 @@ class chessgame:
             movelist2 = copy.deepcopy(movelist)
             subresults_presort = []
             for i in range(len(movelist2)):
-                newpos = self.ExecuteMove(pposition, movelist2[i])
-                newvalue, _, me_in_check = self.Calculation_n_plies(newpos, new_alpha, new_beta, self.presort_using_n_plies)
+                newposidx = self.ExecuteMove(posidx, movelist2[i])
+                newvalue, _, me_in_check = self.Calculation_n_plies(newposidx, new_alpha, new_beta, self.presort_using_n_plies)
                 subresults_presort.append((i, newvalue))
 
-            if pposition.colourtomove == 1:
+            if self.positionstack[posidx].colourtomove == 1:
                 res_sorted_presort = sorted(subresults_presort, key=lambda tup: tup[1], reverse=True)
             else:
                 res_sorted_presort = sorted(subresults_presort, key=lambda tup: tup[1], reverse=False)
@@ -189,13 +218,13 @@ class chessgame:
         for i in range(len(movelist)):
             if n_plies > self.display_when_n_plies_gt:
                 self.writelog(f"{datetime.now()} n_plies {n_plies} checking move {self.DisplayMove(movelist[i])} alpha {new_alpha} beta {new_beta}")
-            newpos = self.ExecuteMove(pposition, movelist[i])
-            newvalue, _, me_in_check = self.Calculation_n_plies(newpos, new_alpha, new_beta, n_plies - 1)
+            newposidx = self.ExecuteMove(posidx, movelist[i])
+            newvalue, _, me_in_check = self.Calculation_n_plies(newposidx, new_alpha, new_beta, n_plies - 1)
             if me_in_check == False:
                 noescapecheck = False
             subresults.append((i, newvalue))
 
-            if pposition.colourtomove == 1:
+            if self.positionstack[posidx].colourtomove == 1:
                 if new_alpha < newvalue:
                     new_alpha = newvalue
                 if newvalue >= new_beta:
@@ -207,18 +236,18 @@ class chessgame:
                     break
 
         #Mate
-        if pposition.PMKingIsInCheck() == True and noescapecheck == True:
-            if pposition.colourtomove == 1:
+        if self.positionstack[posidx].PMKingIsInCheck() == True and noescapecheck == True:
+            if self.positionstack[posidx].colourtomove == 1:
                 evalresult = -100.0
             else:
                 evalresult = 100.0
             return (evalresult, None, False)
         #Stalemate
-        if pposition.PMKingIsInCheck() == False and noescapecheck == True:
+        if self.positionstack[posidx].PMKingIsInCheck() == False and noescapecheck == True:
             evalresult = 0.0
             return (evalresult, None, False)
 
-        if pposition.colourtomove == 1:
+        if self.positionstack[posidx].colourtomove == 1:
             res_sorted = sorted(subresults, key=lambda tup: tup[1], reverse=True)
         else:
             res_sorted = sorted(subresults, key=lambda tup: tup[1], reverse=False)
