@@ -145,10 +145,18 @@ class chessgame:
 
         return newposidx
 #---------------------------------------------------------------------------------------------------------
-    def Calculation_n_plies(self, posidx, alpha, beta, n_plies):
+    def Calculation_n_plies(self, n_plies):
+        myval, moveidx, checkinfo = self.__Calculation_n_plies(0, -100.0, 100.0, n_plies)
+
+        for movei in range(self.positionstack[0].movelist_totalfound):
+            self.positionstack[0].SynchronizeChessmove(self.positionstack[0].movelist[movei], self.mainposition.movelist[movei])
+
+        return myval, moveidx, checkinfo
+#---------------------------------------------------------------------------------------------------------
+    def __Calculation_n_plies(self, posidx, alpha, beta, n_plies):
         #response must be tuple len 3 (x, y, z)
         #x = evaluation float
-        #y = chessmove object instance
+        #y = chessmove idx relative to movelist
         #z = boolean Yes if opponent's King in check else No
 
         evalresult = self.positionstack[posidx].StaticEvaluation(self.piecetypes)
@@ -186,7 +194,7 @@ class chessgame:
             subresults_presort = []
             for i in range(len(movelist2)):
                 newposidx = self.ExecuteMove(posidx, movelist2[i])
-                newvalue, _, me_in_check = self.Calculation_n_plies(newposidx, new_alpha, new_beta, self.presort_using_n_plies)
+                newvalue, _, me_in_check = self.__Calculation_n_plies(newposidx, new_alpha, new_beta, self.presort_using_n_plies)
                 subresults_presort.append((i, newvalue))
 
             if self.positionstack[posidx].colourtomove == 1:
@@ -208,7 +216,7 @@ class chessgame:
                 movenotation = self.positionstack[posidx].movelist[i].ShortNotation(self.piecetypes)
                 self.writelog(f"{datetime.now()} n_plies {n_plies} checking move {movenotation} alpha {new_alpha} beta {new_beta}")
             newposidx = self.ExecuteMove(posidx, self.positionstack[posidx].movelist[i])
-            newvalue, _, me_in_check = self.Calculation_n_plies(newposidx, new_alpha, new_beta, n_plies - 1)
+            newvalue, _, me_in_check = self.__Calculation_n_plies(newposidx, new_alpha, new_beta, n_plies - 1)
             if me_in_check == False:
                 noescapecheck = False
             subresults.append((i, newvalue))

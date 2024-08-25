@@ -6,13 +6,13 @@ def Test(pchessgame, pgamefilename, ppositionfilename, n_plies):
     pchessgame.SaveAsJsonFile(f"{mylocalpath}\\games_verify\\" + pgamefilename + ".json", f"{mylocalpath}\\positions_verify\\" + ppositionfilename + ".json")
     
     pchessgame.display_when_n_plies_gt = n_plies - 2
-    pchessgame.presort_when_n_plies_gt = 5
+    pchessgame.presort_when_n_plies_gt = 6
 
     print(datetime.now())
     print(f"Running evaluation {n_plies} plies {ppositionfilename} ...")
-    myval, mymvidx, _ = pchessgame.Calculation_n_plies(0, -100.0, 100.0, n_plies)
+    myval, mymvidx, _ = pchessgame.Calculation_n_plies(n_plies)
     try:
-        mymvstr = pchessgame.positionstack[0].movelist[mymvidx].ShortNotation(pchessgame.piecetypes)
+        mymvstr = pchessgame.mainposition.movelist[mymvidx].ShortNotation(pchessgame.piecetypes)
     except:
         mymvstr = "No move"
     print(f"Result of evaluation {n_plies} plies {ppositionfilename}: {myval} {mymvstr}")
@@ -41,9 +41,5 @@ mychessgame = chessgame(mylocalpath)
 #FEN2Json(mychessgame, "maingame", "mate_3_black_hard", "r1b2rk1/pppp1ppp/8/2b1p3/2B1P1nq/2N2N2/PPP2PPP/R1BQR1K1 b")
 #Json2FEN(mychessgame, "maingame", "loadedfromfen")
 
-Test(mychessgame, "maingame", "huntermate_3_1_white", 6)
-Test(mychessgame, "maingame", "huntermate_3_1_black", 6)
-Test(mychessgame, "maingame", "huntermate_3_2_white", 6)
-Test(mychessgame, "maingame", "huntermate_3_2_black", 6)
-Test(mychessgame, "maingame", "huntermate_3_3_white", 6)
-Test(mychessgame, "maingame", "huntermate_3_3_black", 6)
+Test(mychessgame, "maingame", "mate_in_5_for_white_BN", 10)
+Test(mychessgame, "maingame", "mate_in_5_for_black_BN", 10)
