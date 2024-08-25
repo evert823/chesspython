@@ -91,8 +91,8 @@ def CreateHunterEndgame(pposition, ppiecetypes, pboardwidth, pboardheight):
 def CreateRandom_main():
     myval = 100.0
     while myval >= 100.0 or myval <= -100.0:
-        ClearBoard(mychessgame.mainposition, mychessgame.boardwidth, mychessgame.boardheight)
-        CreateOneRandomPosition(mychessgame.mainposition, mychessgame.piecetypes, mychessgame.boardwidth, mychessgame.boardheight)
+        ClearBoard(mychessgame.mainposition, mychessgame.mainposition.boardwidth, mychessgame.mainposition.boardheight)
+        CreateOneRandomPosition(mychessgame.mainposition, mychessgame.piecetypes, mychessgame.mainposition.boardwidth, mychessgame.mainposition.boardheight)
         TuneCastlingInfo(mychessgame.mainposition, mychessgame.piecetypes)
         myval, movei, _ = mychessgame.Calculation_n_plies(1)
 
@@ -121,8 +121,8 @@ def CreateHunter_main():
     while myval2 != 100.0:
         myval = 100.0
         while myval >= 100.0 or myval <= -100.0:
-            ClearBoard(mychessgame.mainposition, mychessgame.boardwidth, mychessgame.boardheight)
-            CreateHunterEndgame(mychessgame.mainposition, mychessgame.piecetypes, mychessgame.boardwidth, mychessgame.boardheight)
+            ClearBoard(mychessgame.mainposition, mychessgame.mainposition.boardwidth, mychessgame.mainposition.boardheight)
+            CreateHunterEndgame(mychessgame.mainposition, mychessgame.piecetypes, mychessgame.mainposition.boardwidth, mychessgame.mainposition.boardheight)
             TuneCastlingInfo(mychessgame.mainposition, mychessgame.piecetypes)
             myval, movei, _ = mychessgame.Calculation_n_plies(3)
 
