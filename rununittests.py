@@ -8,8 +8,7 @@ def TestCastle(pchessgame, pgamefilename, ppositionfilename):
     queensidecastling_happened = False
     kingsidecastling_happened = False
 
-    pchessgame.mainposition.ScanAttacked(pchessgame.piecetypes)
-    pchessgame.mainposition.Position2MoveList(pchessgame.piecetypes)
+    _, _, _ = pchessgame.Calculation_n_plies(1)
     for movei in range(pchessgame.mainposition.movelist_totalfound):
         a = pchessgame.mainposition.movelist[movei].ShortNotation(pchessgame.piecetypes)
         if a == "0-0":
@@ -27,8 +26,7 @@ def TestNoCastle(pchessgame, pgamefilename, ppositionfilename):
     
     castling_happened = False
 
-    pchessgame.mainposition.ScanAttacked(pchessgame.piecetypes)
-    pchessgame.mainposition.Position2MoveList(pchessgame.piecetypes)
+    _, _, _ = pchessgame.Calculation_n_plies(1)
     for movei in range(pchessgame.mainposition.movelist_totalfound):
         a = pchessgame.mainposition.movelist[movei].ShortNotation(pchessgame.piecetypes)
         if a == "0-0" or a == "0-0-0":
@@ -40,8 +38,7 @@ def TestNoCastle(pchessgame, pgamefilename, ppositionfilename):
 def TestPawn(pchessgame, pgamefilename, ppositionfilename, expectedcoord):
     pchessgame.LoadFromJsonFile(".\\games\\" + pgamefilename + ".json", ".\\unittests\\" + ppositionfilename + ".json")
     
-    pchessgame.mainposition.ScanAttacked(pchessgame.piecetypes)
-    pchessgame.mainposition.Position2MoveList(pchessgame.piecetypes)
+    _, _, _ = pchessgame.Calculation_n_plies(1)
 
     mymovehappened = False
     for movei in range(pchessgame.mainposition.movelist_totalfound):
@@ -56,8 +53,7 @@ def TestPawn(pchessgame, pgamefilename, ppositionfilename, expectedcoord):
 def TestPawnPromote(pchessgame, pgamefilename, ppositionfilename, expectedcoord):
     pchessgame.LoadFromJsonFile(".\\games\\" + pgamefilename + ".json", ".\\unittests\\" + ppositionfilename + ".json")
     
-    pchessgame.mainposition.ScanAttacked(pchessgame.piecetypes)
-    pchessgame.mainposition.Position2MoveList(pchessgame.piecetypes)
+    _, _, _ = pchessgame.Calculation_n_plies(1)
 
     mymovehappened = False
     for movei in range(pchessgame.mainposition.movelist_totalfound):
@@ -76,8 +72,7 @@ def TestPawnPromote(pchessgame, pgamefilename, ppositionfilename, expectedcoord)
 def TestMove(pchessgame, pgamefilename, ppositionfilename, expectedmovingpiecename, expectedcoord, IsExpected):
     pchessgame.LoadFromJsonFile(".\\games\\" + pgamefilename + ".json", ".\\unittests\\" + ppositionfilename + ".json")
     
-    pchessgame.mainposition.ScanAttacked(pchessgame.piecetypes)
-    pchessgame.mainposition.Position2MoveList(pchessgame.piecetypes)
+    _, _, _ = pchessgame.Calculation_n_plies(1)
 
     mymovehappened = False
     for movei in range(pchessgame.mainposition.movelist_totalfound):
@@ -94,7 +89,7 @@ def TestMove(pchessgame, pgamefilename, ppositionfilename, expectedmovingpiecena
 
 def TestCheck(pchessgame, pgamefilename, ppositionfilename):
     pchessgame.LoadFromJsonFile(".\\games\\" + pgamefilename + ".json", ".\\unittests\\" + ppositionfilename + ".json")
-    pchessgame.mainposition.ScanAttacked(pchessgame.piecetypes)
+    _, _, _ = pchessgame.Calculation_n_plies(1)
     if pchessgame.mainposition.PMKingIsInCheck() == True:
         pass
     else:

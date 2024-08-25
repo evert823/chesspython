@@ -45,7 +45,6 @@ class chessgame:
             self.LoadPiece(p, self.workpath)
 
         self.mainposition.LoadFromJsonFile(ppositionfilename, self.piecetypes)
-        self.init_positionstack()
 #---------------------------------------------------------------------------------------------------------
     def SaveAsJsonFile(self, pfilename, ppositionfilename):
         #Convert class structure to json and save as json file
@@ -71,7 +70,7 @@ class chessgame:
         #boardwidth MUST already be in sync
         #boardheight MUST already be in sync
         topos.colourtomove = frompos.colourtomove
-        #precedingmove will be set in ExecuteMove
+        topos.precedingmove = frompos.precedingmove
         topos.whitekinghasmoved = frompos.whitekinghasmoved
         topos.whitekingsiderookhasmoved = frompos.whitekingsiderookhasmoved
         topos.whitequeensiderookhasmoved = frompos.whitequeensiderookhasmoved
@@ -146,7 +145,14 @@ class chessgame:
         return newposidx
 #---------------------------------------------------------------------------------------------------------
     def Calculation_n_plies(self, n_plies):
+        self.init_positionstack()
         myval, moveidx, checkinfo = self.__Calculation_n_plies(0, -100.0, 100.0, n_plies)
+
+        self.mainposition.SquaresAttackedByPM = self.positionstack[0].SquaresAttackedByPM.copy()
+        self.mainposition.SquaresAttackedByPO = self.positionstack[0].SquaresAttackedByPO.copy()
+        self.mainposition.whitekingcoord = self.positionstack[0].whitekingcoord
+        self.mainposition.blackkingcoord = self.positionstack[0].blackkingcoord
+        self.mainposition.movelist_totalfound = self.positionstack[0].movelist_totalfound
 
         for movei in range(self.positionstack[0].movelist_totalfound):
             self.positionstack[0].SynchronizeChessmove(self.positionstack[0].movelist[movei], self.mainposition.movelist[movei])

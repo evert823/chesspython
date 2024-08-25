@@ -80,13 +80,13 @@ def CreateHunterEndgame(pposition, ppiecetypes, pboardwidth, pboardheight):
         pt = ppiecetypes[i]
         if pt.name == "King":
             PutPiece(pposition, 0, 3, 0, 3, i, -1)
-            PutPiece(pposition, 0, 4, 0, 5, i, 1)
+            PutPiece(pposition, 0, 5, 0, 5, i, 1)
         elif pt.name == "Hunter":
-            PutPiece(pposition, 0, 5, 0, 4, i, 1)
+            PutPiece(pposition, 0, 6, 0, 6, i, 1)
         elif pt.name == "Bishop":
             PutPiece(pposition, 0, 7, 0, 7, i, 1)
         elif pt.name == "Knight":
-            PutPiece(pposition, 0, 6, 0, 6, i, 1)
+            PutPiece(pposition, 0, 7, 0, 7, i, 1)
 
 def CreateRandom_main():
     myval = 100.0
@@ -120,11 +120,19 @@ def CreateHunter_main():
 
     while myval2 != 100.0:
         myval = 100.0
+        mycounter = 0
         while myval >= 100.0 or myval <= -100.0:
             ClearBoard(mychessgame.mainposition, mychessgame.mainposition.boardwidth, mychessgame.mainposition.boardheight)
             CreateHunterEndgame(mychessgame.mainposition, mychessgame.piecetypes, mychessgame.mainposition.boardwidth, mychessgame.mainposition.boardheight)
             TuneCastlingInfo(mychessgame.mainposition, mychessgame.piecetypes)
             myval, movei, _ = mychessgame.Calculation_n_plies(3)
+            mycounter += 1
+            if mycounter % 100000 == 0:
+                a = mychessgame.mainposition.PositionAsFEN(mychessgame.piecetypes)
+                print(f"Still phase 1 {mycounter} {myval} {datetime.now()} FEN = {a}")
+
+
+        print(myval)
 
         try:
             mymvstr = mychessgame.mainposition.movelist[movei].ShortNotation(mychessgame.piecetypes)
