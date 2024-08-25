@@ -9,9 +9,9 @@ def TestCastle(pchessgame, pgamefilename, ppositionfilename):
     kingsidecastling_happened = False
 
     pchessgame.mainposition.ScanAttacked(pchessgame.piecetypes)
-    mymovelist = pchessgame.mainposition.Position2MoveList(pchessgame.piecetypes)
-    for mv in mymovelist:
-        a = mv.ShortNotation(pchessgame.piecetypes)
+    pchessgame.mainposition.Position2MoveList(pchessgame.piecetypes)
+    for movei in range(pchessgame.mainposition.movelist_totalfound):
+        a = pchessgame.mainposition.movelist[movei].ShortNotation(pchessgame.piecetypes)
         if a == "0-0":
             kingsidecastling_happened = True
         if a == "0-0-0":
@@ -28,9 +28,9 @@ def TestNoCastle(pchessgame, pgamefilename, ppositionfilename):
     castling_happened = False
 
     pchessgame.mainposition.ScanAttacked(pchessgame.piecetypes)
-    mymovelist = pchessgame.mainposition.Position2MoveList(pchessgame.piecetypes)
-    for mv in mymovelist:
-        a = mv.ShortNotation(pchessgame.piecetypes)
+    pchessgame.mainposition.Position2MoveList(pchessgame.piecetypes)
+    for movei in range(pchessgame.mainposition.movelist_totalfound):
+        a = pchessgame.mainposition.movelist[movei].ShortNotation(pchessgame.piecetypes)
         if a == "0-0" or a == "0-0-0":
             castling_happened = True
 
@@ -41,13 +41,13 @@ def TestPawn(pchessgame, pgamefilename, ppositionfilename, expectedcoord):
     pchessgame.LoadFromJsonFile(".\\games\\" + pgamefilename + ".json", ".\\unittests\\" + ppositionfilename + ".json")
     
     pchessgame.mainposition.ScanAttacked(pchessgame.piecetypes)
-    mymovelist = pchessgame.mainposition.Position2MoveList(pchessgame.piecetypes)
+    pchessgame.mainposition.Position2MoveList(pchessgame.piecetypes)
 
     mymovehappened = False
-    for mv in mymovelist:
-        pt = pchessgame.piecetypes[abs(mv.MovingPiece) - 1]
+    for movei in range(pchessgame.mainposition.movelist_totalfound):
+        pt = pchessgame.piecetypes[abs(pchessgame.mainposition.movelist[movei].MovingPiece) - 1]
         if pt.name == "Pawn":
-            if mv.coordinates == expectedcoord:
+            if pchessgame.mainposition.movelist[movei].coordinates == expectedcoord:
                 mymovehappened = True
 
     if mymovehappened == False:
@@ -57,15 +57,15 @@ def TestPawnPromote(pchessgame, pgamefilename, ppositionfilename, expectedcoord)
     pchessgame.LoadFromJsonFile(".\\games\\" + pgamefilename + ".json", ".\\unittests\\" + ppositionfilename + ".json")
     
     pchessgame.mainposition.ScanAttacked(pchessgame.piecetypes)
-    mymovelist = pchessgame.mainposition.Position2MoveList(pchessgame.piecetypes)
+    pchessgame.mainposition.Position2MoveList(pchessgame.piecetypes)
 
     mymovehappened = False
-    for mv in mymovelist:
-        pt = pchessgame.piecetypes[abs(mv.MovingPiece) - 1]
+    for movei in range(pchessgame.mainposition.movelist_totalfound):
+        pt = pchessgame.piecetypes[abs(pchessgame.mainposition.movelist[movei].MovingPiece) - 1]
         if pt.name == "Pawn":
-            if mv.coordinates == expectedcoord:
-                if mv.PromoteToPiece != 0:
-                    ptp = pchessgame.piecetypes[abs(mv.PromoteToPiece) - 1]
+            if pchessgame.mainposition.movelist[movei].coordinates == expectedcoord:
+                if pchessgame.mainposition.movelist[movei].PromoteToPiece != 0:
+                    ptp = pchessgame.piecetypes[abs(pchessgame.mainposition.movelist[movei].PromoteToPiece) - 1]
                     if ptp.name == "Hunter":
                         mymovehappened = True
 
@@ -77,13 +77,13 @@ def TestMove(pchessgame, pgamefilename, ppositionfilename, expectedmovingpiecena
     pchessgame.LoadFromJsonFile(".\\games\\" + pgamefilename + ".json", ".\\unittests\\" + ppositionfilename + ".json")
     
     pchessgame.mainposition.ScanAttacked(pchessgame.piecetypes)
-    mymovelist = pchessgame.mainposition.Position2MoveList(pchessgame.piecetypes)
+    pchessgame.mainposition.Position2MoveList(pchessgame.piecetypes)
 
     mymovehappened = False
-    for mv in mymovelist:
-        pt = pchessgame.piecetypes[abs(mv.MovingPiece) - 1]
+    for movei in range(pchessgame.mainposition.movelist_totalfound):
+        pt = pchessgame.piecetypes[abs(pchessgame.mainposition.movelist[movei].MovingPiece) - 1]
         if pt.name == expectedmovingpiecename:
-            if mv.coordinates == expectedcoord:
+            if pchessgame.mainposition.movelist[movei].coordinates == expectedcoord:
                 mymovehappened = True
 
     if mymovehappened == True and IsExpected == False:
@@ -102,7 +102,7 @@ def TestCheck(pchessgame, pgamefilename, ppositionfilename):
 
 def TestStalemate(pchessgame, pgamefilename, ppositionfilename):
     pchessgame.LoadFromJsonFile(".\\games\\" + pgamefilename + ".json", ".\\unittests\\" + ppositionfilename + ".json")
-    myval, mymv, _ = pchessgame.Calculation_n_plies(0, -100.0, 100.0, 1)
+    myval, _, _ = pchessgame.Calculation_n_plies(0, -100.0, 100.0, 1)
 
     if myval == 0.0:
         pass
@@ -111,7 +111,7 @@ def TestStalemate(pchessgame, pgamefilename, ppositionfilename):
 
 def TestMate(pchessgame, pgamefilename, ppositionfilename):
     pchessgame.LoadFromJsonFile(".\\games\\" + pgamefilename + ".json", ".\\unittests\\" + ppositionfilename + ".json")
-    myval, mymv, _ = pchessgame.Calculation_n_plies(0, -100.0, 100.0, 1)
+    myval, _, _ = pchessgame.Calculation_n_plies(0, -100.0, 100.0, 1)
 
     if ((myval == 100.0 and pchessgame.mainposition.colourtomove == -1) or
         (myval == -100.0 and pchessgame.mainposition.colourtomove == 1)):
@@ -119,7 +119,7 @@ def TestMate(pchessgame, pgamefilename, ppositionfilename):
     else:
         raise Exception(f"Mate expected, but there was no mate.")
 
-def TestMate_n(pchessgame, pgamefilename, ppositionfilename, mate_in_n=2):
+def TestMate_n(pchessgame, pgamefilename, ppositionfilename, mate_in_n=2, expectedcoordinates=(-1, -1, -1, -1)):
     if mate_in_n in (1, 2, 3, 4):
         pass
     else:
@@ -129,7 +129,7 @@ def TestMate_n(pchessgame, pgamefilename, ppositionfilename, mate_in_n=2):
     pchessgame.LoadFromJsonFile(".\\games\\" + pgamefilename + ".json", ".\\unittests\\" + ppositionfilename + ".json")
 
     startdatetime = datetime.now()
-    myval, mymv, _ = pchessgame.Calculation_n_plies(0, -100.0, 100.0, n_plies)
+    myval, movei, _ = pchessgame.Calculation_n_plies(0, -100.0, 100.0, n_plies)
     enddatetime = datetime.now()
 
     d = enddatetime - startdatetime
@@ -137,6 +137,11 @@ def TestMate_n(pchessgame, pgamefilename, ppositionfilename, mate_in_n=2):
 
     if n_plies < 5 and secondsneeded > 15:
         raise Exception(f"Performance of calculation under acceptable levels")
+
+    foundcoordinates = pchessgame.positionstack[0].movelist[movei].coordinates
+    if expectedcoordinates != (-1, -1, -1, -1):
+        if foundcoordinates != expectedcoordinates:
+            raise Exception(f"Mate expected, but the identified move is not correct.")
 
     if ((myval == 100.0 and pchessgame.mainposition.colourtomove == 1) or
         (myval == -100.0 and pchessgame.mainposition.colourtomove == -1)):
@@ -153,7 +158,7 @@ def TestStalemate_n(pchessgame, pgamefilename, ppositionfilename, stalemate_in_n
 
     pchessgame.LoadFromJsonFile(".\\games\\" + pgamefilename + ".json", ".\\unittests\\" + ppositionfilename + ".json")
 
-    myval, mymv, _ = pchessgame.Calculation_n_plies(0, -100.0, 100.0, n_plies)
+    myval, _, _ = pchessgame.Calculation_n_plies(0, -100.0, 100.0, n_plies)
 
     if myval == 0.0:
         pass
@@ -167,7 +172,7 @@ def BaselinePerformance(pchessgame, pgamefilename, ppositionfilename, n_plies, b
     print(f"Executing performance test for {ppositionfilename} baseline {baseline_seconds}")
 
     startdatetime = datetime.now()
-    myval, mymv, _ = pchessgame.Calculation_n_plies(0, -100.0, 100.0, n_plies)
+    myval, _, _ = pchessgame.Calculation_n_plies(0, -100.0, 100.0, n_plies)
     enddatetime = datetime.now()
     d = enddatetime - startdatetime
     secondsneeded = d.total_seconds()
@@ -217,16 +222,18 @@ TestStalemate(mychessgame, "maingame", "05A_stalemate_white")
 TestStalemate(mychessgame, "maingame", "05A_stalemate_black")
 TestMate(mychessgame, "maingame", "06A_mate_0_white")
 TestMate(mychessgame, "maingame", "06A_mate_0_black")
-TestMate_n(mychessgame, "maingame", "06B_mate_1_white", 1)
-TestMate_n(mychessgame, "maingame", "06B_mate_1_black", 1)
-TestMate_n(mychessgame, "maingame", "06C_mate_2_white_01", 2)
-TestMate_n(mychessgame, "maingame", "06C_mate_2_white_02", 2)
-TestMate_n(mychessgame, "maingame", "06C_mate_2_black_01", 2)
-TestMate_n(mychessgame, "maingame", "06C_mate_2_black_02", 2)
+TestMate_n(mychessgame, "maingame", "06B_mate_1_white", 1, (5, 1, 2, 4))
+TestMate_n(mychessgame, "maingame", "06B_mate_1_black", 1, (5, 6, 2, 3))
+TestMate_n(mychessgame, "maingame", "06C_mate_2_white_01", 2, (0, 1, 6, 7))
+TestMate_n(mychessgame, "maingame", "06C_mate_2_white_02", 2, (7, 1, 1, 7))
+TestMate_n(mychessgame, "maingame", "06C_mate_2_black_01", 2, (7, 6, 1, 0))
+TestMate_n(mychessgame, "maingame", "06C_mate_2_black_02", 2, (0, 6, 6, 0))
+TestMate_n(mychessgame, "maingame", "06D_huntermate_3_white", 3, (2, 4, 1, 4))
+TestMate_n(mychessgame, "maingame", "06D_huntermate_3_black", 3, (2, 3, 1, 3))
 TestStalemate_n(mychessgame, "maingame", "08A_stalemate_2_white", 2)
 TestStalemate_n(mychessgame, "maingame", "08A_stalemate_2_black", 2)
-BaselinePerformance(mychessgame, "maingame", "07A_mate_4_white_BN", 8, 25)
-BaselinePerformance(mychessgame, "maingame", "07A_mate_4_black_BN", 8, 25)
+BaselinePerformance(mychessgame, "maingame", "07A_mate_4_white_BN", 8, 6)
+BaselinePerformance(mychessgame, "maingame", "07A_mate_4_black_BN", 8, 6)
 print("ALL UNITTESTS PASSED")
 
 print(datetime.now())

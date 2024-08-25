@@ -1,7 +1,6 @@
 import json
 import chesshelp
 from chessmove import chessmove
-import copy
 
 class chessposition:
     def __init__(self):
@@ -21,12 +20,17 @@ class chessposition:
         self.SquaresAttackedByPO = [] #list of squares as tuples (i,j) that the opponent is attacking
         self.whitekingcoord = (-1, -1)
         self.blackkingcoord = (-1, -1)
+        self.movelist_allocated = 500
+        self.movelist_totalfound = 0
+        self.movelist = []
+        self.AllocateMovelist()
 #---------------------------------------------------------------------------------------------------------
     def ClearNonPersistent(self):
         self.SquaresAttackedByPM.clear()
         self.SquaresAttackedByPO.clear()
         self.whitekingcoord = (-1, -1)
         self.blackkingcoord = (-1, -1)
+        self.movelist_totalfound = 0
 #---------------------------------------------------------------------------------------------------------
     def ResetBoardsize(self, pboardwidth, pboardheight):
         self.boardwidth = pboardwidth
@@ -38,6 +42,12 @@ class chessposition:
                 myrank.append(0)
             self.squares.append(myrank)
         self.ClearNonPersistent()
+#---------------------------------------------------------------------------------------------------------
+    def AllocateMovelist(self):
+        self.movelist.clear()
+        for i in range(self.movelist_allocated):
+            mv = chessmove(0, 0, 0, 0)
+            self.movelist.append(mv)
 #---------------------------------------------------------------------------------------------------------
     def LoadFromJsonFile(self, pfilename, ppiecetypes):
         #Load from json file and convert to class structure
@@ -295,24 +305,46 @@ class chessposition:
                     j2 = j2 - v[1]
         return SquaresAttacked
 #---------------------------------------------------------------------------------------------------------
+    def InitializeMove(self, movei, pi1, pj1, pi2, pj2):
+        self.movelist[movei].MovingPiece = 0
+        self.movelist[movei].coordinates = (pi1, pj1, pi2, pj2)
+        self.movelist[movei].IsEnPassant = False
+        self.movelist[movei].IsCapture = False
+        self.movelist[movei].IsCastling = False
+        self.movelist[movei].othercoordinates = (-1, -1, -1, -1)
+        self.movelist[movei].PromoteToPiece = 0
+#---------------------------------------------------------------------------------------------------------
+    def SynchronizeChessmove(self, frommove, tomove):
+        tomove.MovingPiece = frommove.MovingPiece
+        tomove.coordinates = frommove.coordinates
+        tomove.IsEnPassant = frommove.IsEnPassant
+        tomove.IsCapture = frommove.IsCapture
+        tomove.IsCastling = frommove.IsCastling
+        tomove.othercoordinates = frommove.othercoordinates
+        tomove.PromoteToPiece = frommove.PromoteToPiece
+#---------------------------------------------------------------------------------------------------------
     def Position2MoveList(self, ppiecetypes):
-        MoveList = []
+        self.movelist_totalfound = 0
         for i in range(self.boardwidth):
             for j in range(self.boardheight):
                 if ((self.squares[j][i] > 0 and self.colourtomove > 0) or
                     (self.squares[j][i] < 0 and self.colourtomove < 0)):
-                    MoveList.extend(self.GetStepLeapMoves(i, j, ppiecetypes))
-                    MoveList.extend(self.GetSlideMoves(i, j, ppiecetypes))
-                    MoveList.extend(self.GetStepLeapCaptures(i, j, ppiecetypes))
-                    MoveList.extend(self.GetSlideCaptures(i, j, ppiecetypes))
-                    MoveList.extend(self.GetPawn2StepMoves(ppiecetypes, i, j))
-                    MoveList.extend(self.GetPawnEnPassantMoves(ppiecetypes, i, j))
-        MoveList.extend(self.GetCastling(ppiecetypes))
-
-        return MoveList
+                    self.GetStepLeapMoves(i, j, ppiecetypes)
+                    self.GetSlideMoves(i, j, ppiecetypes)
+                    self.GetStepLeapCaptures(i, j, ppiecetypes)
+                    self.GetSlideCaptures(i, j, ppiecetypes)
+                    self.GetPawn2StepMoves(ppiecetypes, i, j)
+                    self.GetPawnEnPassantMoves(ppiecetypes, i, j)
+        self.GetCastling(ppiecetypes)
+#---------------------------------------------------------------------------------------------------------
+    def DisplayMovelist(self, ppiecetypes):
+        sl = []
+        for movei in range(self.movelist_totalfound):
+            sl.append(self.movelist[movei].ShortNotation(ppiecetypes))
+        s = ",".join(sl)
+        return s
 #---------------------------------------------------------------------------------------------------------
     def GetStepLeapMoves(self, i, j, ppiecetypes):
-        MoveList = []
         #print(f"GetStepLeaveMoves({i},{j})")
 
         pt = ppiecetypes[abs(self.squares[j][i]) - 1]
@@ -328,14 +360,12 @@ class chessposition:
             if i2 >= 0 and i2 < self.boardwidth:
                 if j2 >= 0 and j2 < self.boardheight:
                     if self.squares[j2][i2] == 0:
-                        mv = chessmove(i, j, i2, j2)
-                        mv.MovingPiece = self.squares[j][i]
-                        MoveList.extend(self.GetPromotion(mv, ppiecetypes))
-
-        return MoveList
+                        movei = self.movelist_totalfound
+                        self.InitializeMove(movei, i, j, i2, j2)
+                        self.movelist[movei].MovingPiece = self.squares[j][i]
+                        self.GetPromotion(movei, ppiecetypes)
 #---------------------------------------------------------------------------------------------------------
     def GetSlideMoves(self, i, j, ppiecetypes):
-        MoveList = []
         #print(f"GetSlideMoves({i},{j})")
 
         pt = ppiecetypes[abs(self.squares[j][i]) - 1]
@@ -352,9 +382,10 @@ class chessposition:
             while (i2 >= 0 and i2 < self.boardwidth and
                    j2 >= 0 and j2 < self.boardheight and blocked == False):
                 if self.squares[j2][i2] == 0:
-                    mv = chessmove(i, j, i2, j2)
-                    mv.MovingPiece = self.squares[j][i]
-                    MoveList.extend(self.GetPromotion(mv, ppiecetypes))
+                    movei = self.movelist_totalfound
+                    self.InitializeMove(movei, i, j, i2, j2)
+                    self.movelist[movei].MovingPiece = self.squares[j][i]
+                    self.GetPromotion(movei, ppiecetypes)
                 else:
                     blocked = True
 
@@ -364,11 +395,8 @@ class chessposition:
                     j2 = j2 + v[1]
                 else:
                     j2 = j2 - v[1]
-
-        return MoveList
 #---------------------------------------------------------------------------------------------------------
     def GetStepLeapCaptures(self, i, j, ppiecetypes):
-        MoveList = []
         #print(f"GetStepLeaveCaptures({i},{j})")
 
         pt = ppiecetypes[abs(self.squares[j][i]) - 1]
@@ -389,15 +417,13 @@ class chessposition:
                 if j2 >= 0 and j2 < self.boardheight:
                     if ((self.squares[j2][i2] > 0 and self.squares[j][i] < 0) or
                         (self.squares[j2][i2] < 0 and self.squares[j][i] > 0)):
-                        mv = chessmove(i, j, i2, j2)
-                        mv.MovingPiece = self.squares[j][i]
-                        mv.IsCapture = True
-                        MoveList.extend(self.GetPromotion(mv, ppiecetypes))
-
-        return MoveList
+                        movei = self.movelist_totalfound
+                        self.InitializeMove(movei, i, j, i2, j2)
+                        self.movelist[movei].MovingPiece = self.squares[j][i]
+                        self.movelist[movei].IsCapture = True
+                        self.GetPromotion(movei, ppiecetypes)
 #---------------------------------------------------------------------------------------------------------
     def GetSlideCaptures(self, i, j, ppiecetypes):
-        MoveList = []
         #print(f"GetSlideCaptures({i},{j})")
 
         pt = ppiecetypes[abs(self.squares[j][i]) - 1]
@@ -421,10 +447,11 @@ class chessposition:
 
                 if ((self.squares[j2][i2] > 0 and self.squares[j][i] < 0) or
                     (self.squares[j2][i2] < 0 and self.squares[j][i] > 0)):
-                    mv = chessmove(i, j, i2, j2)
-                    mv.MovingPiece = self.squares[j][i]
-                    mv.IsCapture = True
-                    MoveList.extend(self.GetPromotion(mv, ppiecetypes))
+                    movei = self.movelist_totalfound
+                    self.InitializeMove(movei, i, j, i2, j2)
+                    self.movelist[movei].MovingPiece = self.squares[j][i]
+                    self.movelist[movei].IsCapture = True
+                    self.GetPromotion(movei, ppiecetypes)
                     blocked = True
                 elif self.squares[j2][i2] != 0:
                     blocked = True
@@ -435,22 +462,18 @@ class chessposition:
                     j2 = j2 + v[1]
                 else:
                     j2 = j2 - v[1]
-
-        return MoveList
 #---------------------------------------------------------------------------------------------------------
-    def GetPromotion(self, mv, ppiecetypes):
+    def GetPromotion(self, movei, ppiecetypes):
         includepromote = False
         includenonpromote = False
 
-        MoveList = []
-
-        pt1 = ppiecetypes[abs(mv.MovingPiece) - 1]
+        pt1 = ppiecetypes[abs(self.movelist[movei].MovingPiece) - 1]
 
         if pt1.name in ["Pawn"]:
-            if mv.MovingPiece > 0 and mv.coordinates[3] == self.boardheight - 1:
+            if self.movelist[movei].MovingPiece > 0 and self.movelist[movei].coordinates[3] == self.boardheight - 1:
                 includepromote = True
                 includenonpromote = False
-            elif mv.MovingPiece < 0 and mv.coordinates[3] == 0:
+            elif self.movelist[movei].MovingPiece < 0 and self.movelist[movei].coordinates[3] == 0:
                 includepromote = True
                 includenonpromote = False
             else:
@@ -461,31 +484,28 @@ class chessposition:
             includenonpromote = True
 
         if includenonpromote == True:
-            MoveList.append(mv)
+            self.movelist_totalfound += 1
 
         if includepromote == True:
             for pi in range(len(ppiecetypes)):
                 if (ppiecetypes[pi].name not in ["Amazon", "King", pt1.name]) and ppiecetypes[pi].IsRoyal == False:
-                    mv2 = copy.deepcopy(mv)
-                    if mv.MovingPiece < 0:
-                        mv2.PromoteToPiece = (pi + 1) * -1
+                    movei2 = self.movelist_totalfound
+                    self.SynchronizeChessmove(self.movelist[movei], self.movelist[movei2])
+                    if self.movelist[movei].MovingPiece < 0:
+                        self.movelist[movei2].PromoteToPiece = (pi + 1) * -1
                     else:
-                        mv2.PromoteToPiece = pi + 1
-                    MoveList.append(mv2)
-
-        return MoveList
+                        self.movelist[movei2].PromoteToPiece = pi + 1
+                    self.movelist_totalfound += 1
 #---------------------------------------------------------------------------------------------------------
     def GetPawn2StepMoves(self, ppiecetypes, i, j):
-        MoveList = []
-
         pt = ppiecetypes[abs(self.squares[j][i]) - 1]
 
         if pt.name != "Pawn":
-            return MoveList
+            return
         if self.colourtomove > 0 and j != 1:
-            return MoveList
+            return
         if self.colourtomove < 0 and j != self.boardheight - 2:
-            return MoveList
+            return
 
         i2 = i
         i_skip = i
@@ -496,21 +516,18 @@ class chessposition:
             j_skip = j - 1
             j2 = j - 2
         if self.squares[j_skip][i_skip] == 0 and self.squares[j2][i2] == 0:
-            mv = chessmove(i, j, i2, j2)
-            mv.MovingPiece = self.squares[j][i]
-            MoveList.append(mv)
-
-        return MoveList
+            movei = self.movelist_totalfound
+            self.InitializeMove(movei, i, j, i2, j2)
+            self.movelist[movei].MovingPiece = self.squares[j][i]
+            self.movelist_totalfound += 1
 #---------------------------------------------------------------------------------------------------------
     def GetPawnEnPassantMoves(self, ppiecetypes, i, j):
-        MoveList = []
-
         pt = ppiecetypes[abs(self.squares[j][i]) - 1]
 
         if pt.name != "Pawn":
-            return MoveList
+            return
         if self.precedingmove[3] != j:
-            return MoveList
+            return
 
         x_from = self.precedingmove[0]
         y_from = self.precedingmove[1]
@@ -518,41 +535,41 @@ class chessposition:
         y_to = self.precedingmove[3]
         ptm = ppiecetypes[abs(self.squares[y_to][x_to]) - 1]
         if ptm.name != "Pawn":
-            return MoveList
+            return
         if x_from - i == 1 or x_from - i == -1:
             pass
         else:
-            return MoveList
+            return
         
         if self.colourtomove > 0:
             if self.squares[y_to][x_to] > 0:
-                return MoveList
+                return
             if j != self.boardheight - 4:
-                return MoveList
+                return
             if y_from != y_to + 2:
-                return MoveList
-            mv = chessmove(i, j, x_from, y_to + 1)
-            mv.MovingPiece = self.squares[j][i]
-            mv.IsEnPassant = True
-            mv.othercoordinates = (x_to, y_to, -1, -1)
-            mv.IsCapture = True
-            MoveList.append(mv)
+                return
+            movei = self.movelist_totalfound
+            self.InitializeMove(movei, i, j, x_from, y_to + 1)
+            self.movelist[movei].MovingPiece = self.squares[j][i]
+            self.movelist[movei].IsEnPassant = True
+            self.movelist[movei].othercoordinates = (x_to, y_to, -1, -1)
+            self.movelist[movei].IsCapture = True
+            self.movelist_totalfound += 1
 
         if self.colourtomove < 0:
             if self.squares[y_to][x_to] < 0:
-                return MoveList
+                return
             if j != 3:
-                return MoveList
+                return
             if y_from != y_to - 2:
-                return MoveList
-            mv = chessmove(i, j, x_from, y_to - 1)
-            mv.MovingPiece = self.squares[j][i]
-            mv.IsEnPassant = True
-            mv.othercoordinates = (x_to, y_to, -1, -1)
-            mv.IsCapture = True
-            MoveList.append(mv)
-
-        return MoveList
+                return
+            movei = self.movelist_totalfound
+            self.InitializeMove(movei, i, j, x_from, y_to - 1)
+            self.movelist[movei].MovingPiece = self.squares[j][i]
+            self.movelist[movei].IsEnPassant = True
+            self.movelist[movei].othercoordinates = (x_to, y_to, -1, -1)
+            self.movelist[movei].IsCapture = True
+            self.movelist_totalfound += 1
 #---------------------------------------------------------------------------------------------------------
     def LocateKingRooks4Castling(self, ppiecetypes):
         i_k = -1
@@ -581,14 +598,13 @@ class chessposition:
         return i_k, i_qr, i_kr
 #---------------------------------------------------------------------------------------------------------
     def GetCastling(self, ppiecetypes):
-        MoveList = []
         if self.colourtomove == 1:
             if self.whitekinghasmoved == True:
-                return MoveList
+                return
             j = 0
         if self.colourtomove == -1:
             if self.blackkinghasmoved == True:
-                return MoveList
+                return
             j = self.boardheight - 1
 
 
@@ -632,11 +648,12 @@ class chessposition:
                     queensidepossible = False
 
         if queensidepossible:
-            mv = chessmove(i_k, j, i_k_new, j)
-            mv.MovingPiece = self.squares[j][i_k]
-            mv.IsCastling = True
-            mv.othercoordinates = (i_qr, j, i_qr_new, j)
-            MoveList.append(mv)
+            movei = self.movelist_totalfound
+            self.InitializeMove(movei, i_k, j, i_k_new, j)
+            self.movelist[movei].MovingPiece = self.squares[j][i_k]
+            self.movelist[movei].IsCastling = True
+            self.movelist[movei].othercoordinates = (i_qr, j, i_qr_new, j)
+            self.movelist_totalfound += 1
 
         if kingsidepossible:
             i_k_new = self.boardwidth - 2
@@ -652,13 +669,12 @@ class chessposition:
                     kingsidepossible = False
 
         if kingsidepossible:
-            mv = chessmove(i_k, j, i_k_new, j)
-            mv.MovingPiece = self.squares[j][i_k]
-            mv.IsCastling = True
-            mv.othercoordinates = (i_kr, j, i_kr_new, j)
-            MoveList.append(mv)
-
-        return MoveList
+            movei = self.movelist_totalfound
+            self.InitializeMove(movei, i_k, j, i_k_new, j)
+            self.movelist[movei].MovingPiece = self.squares[j][i_k]
+            self.movelist[movei].IsCastling = True
+            self.movelist[movei].othercoordinates = (i_kr, j, i_kr_new, j)
+            self.movelist_totalfound += 1
 #---------------------------------------------------------------------------------------------------------
     def StaticEvaluation(self, ppiecetypes):
         materialbalance = 0.0

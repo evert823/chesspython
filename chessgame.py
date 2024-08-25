@@ -1,7 +1,7 @@
 import json
 from chesspiecetype import chesspiecetype
+from chessmove import chessmove
 from chessposition import chessposition
-import copy
 from datetime import datetime
 
 class chessgame:
@@ -145,20 +145,6 @@ class chessgame:
 
         return newposidx
 #---------------------------------------------------------------------------------------------------------
-    def DisplayMove(self, pmove):
-        try:
-            s = pmove.ShortNotation(self.piecetypes)
-        except:
-            s = "NA"
-        return s
-#---------------------------------------------------------------------------------------------------------
-    def DisplayMoves(self, pmovelist):
-        sl = []
-        for mv in pmovelist:
-            sl.append(self.DisplayMove(mv))
-        s = ",".join(sl)
-        return s
-#---------------------------------------------------------------------------------------------------------
     def Calculation_n_plies(self, posidx, alpha, beta, n_plies):
         #response must be tuple len 3 (x, y, z)
         #x = evaluation float
@@ -182,7 +168,7 @@ class chessgame:
         if n_plies == 0:
             return (evalresult, None, False)
 
-        movelist = self.positionstack[posidx].Position2MoveList(self.piecetypes)
+        self.positionstack[posidx].Position2MoveList(self.piecetypes)
 
         new_alpha = alpha
         new_beta = beta
@@ -191,8 +177,12 @@ class chessgame:
         #presort BEGIN
         if n_plies > self.presort_when_n_plies_gt:
             if n_plies > self.display_when_n_plies_gt:
-                self.writelog(f"List before sorting : {self.DisplayMoves(movelist)}")
-            movelist2 = copy.deepcopy(movelist)
+                self.writelog(f"List before sorting : {self.positionstack[posidx].DisplayMovelist(self.piecetypes)}")
+            movelist2 = []
+            for movei in range(self.positionstack[posidx].movelist_totalfound):
+                mv = chessmove(0, 0, 0, 0)
+                self.positionstack[posidx].SynchronizeChessmove(self.positionstack[posidx].movelist[movei], mv)
+                movelist2.append(mv)
             subresults_presort = []
             for i in range(len(movelist2)):
                 newposidx = self.ExecuteMove(posidx, movelist2[i])
@@ -204,21 +194,20 @@ class chessgame:
             else:
                 res_sorted_presort = sorted(subresults_presort, key=lambda tup: tup[1], reverse=False)
 
-            movelist.clear()
             for i in range(len(res_sorted_presort)):
-                mv = copy.deepcopy(movelist2[res_sorted_presort[i][0]])
-                movelist.append(mv)
+                self.positionstack[posidx].SynchronizeChessmove(movelist2[res_sorted_presort[i][0]], self.positionstack[posidx].movelist[i])
             if n_plies > self.display_when_n_plies_gt:
-                self.writelog(f"List after sorting : {self.DisplayMoves(movelist)}")
+                self.writelog(f"List after sorting : {self.positionstack[posidx].DisplayMovelist(self.piecetypes)}")
         #presort END
 
         subresults = []
 
         noescapecheck = True
-        for i in range(len(movelist)):
+        for i in range(self.positionstack[posidx].movelist_totalfound):
             if n_plies > self.display_when_n_plies_gt:
-                self.writelog(f"{datetime.now()} n_plies {n_plies} checking move {self.DisplayMove(movelist[i])} alpha {new_alpha} beta {new_beta}")
-            newposidx = self.ExecuteMove(posidx, movelist[i])
+                movenotation = self.positionstack[posidx].movelist[i].ShortNotation(self.piecetypes)
+                self.writelog(f"{datetime.now()} n_plies {n_plies} checking move {movenotation} alpha {new_alpha} beta {new_beta}")
+            newposidx = self.ExecuteMove(posidx, self.positionstack[posidx].movelist[i])
             newvalue, _, me_in_check = self.Calculation_n_plies(newposidx, new_alpha, new_beta, n_plies - 1)
             if me_in_check == False:
                 noescapecheck = False
@@ -253,9 +242,9 @@ class chessgame:
             res_sorted = sorted(subresults, key=lambda tup: tup[1], reverse=False)
 
         evalresult = res_sorted[0][1]
-        bestmove = copy.deepcopy(movelist[res_sorted[0][0]])
+        bestmoveidx = res_sorted[0][0]
 
-        return (evalresult, bestmove, False)
+        return (evalresult, bestmoveidx, False)
 #---------------------------------------------------------------------------------------------------------
     def SwapBlackWhite(self, pposition):
         #For testing purposes - create same position with reversed colours and mirrored
