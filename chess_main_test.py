@@ -41,5 +41,4 @@ mychessgame = chessgame(mylocalpath)
 #FEN2Json(mychessgame, "maingame", "mate_3_black_hard", "r1b2rk1/pppp1ppp/8/2b1p3/2B1P1nq/2N2N2/PPP2PPP/R1BQR1K1 b")
 #Json2FEN(mychessgame, "maingame", "loadedfromfen")
 
-Test(mychessgame, "maingame", "mate_in_5_for_white_BN", 10)
-Test(mychessgame, "maingame", "mate_in_5_for_black_BN", 10)
+Test(mychessgame, "maingame", "mate_3_black_hard", 6)

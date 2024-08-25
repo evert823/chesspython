@@ -28,6 +28,7 @@ class chessgame:
             mypos.ResetBoardsize(self.mainposition.boardwidth, self.mainposition.boardheight)
             self.positionstack.append(mypos)
         self.SynchronizePosition(self.mainposition, self.positionstack[0])
+        self.positionstack[0].precedingmove = self.mainposition.precedingmove
 #---------------------------------------------------------------------------------------------------------
     def writelog(self, pmessage):
         file = open(self.logfilename, 'a')
@@ -70,7 +71,7 @@ class chessgame:
         #boardwidth MUST already be in sync
         #boardheight MUST already be in sync
         topos.colourtomove = frompos.colourtomove
-        topos.precedingmove = frompos.precedingmove
+        #topos.precedingmove = frompos.precedingmove
         topos.whitekinghasmoved = frompos.whitekinghasmoved
         topos.whitekingsiderookhasmoved = frompos.whitekingsiderookhasmoved
         topos.whitequeensiderookhasmoved = frompos.whitequeensiderookhasmoved
