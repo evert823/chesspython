@@ -6,7 +6,7 @@ def Test(pchessgame, pgamefilename, ppositionfilename, n_plies):
     pchessgame.SaveAsJsonFile(f"{mylocalpath}\\games_verify\\" + pgamefilename + ".json", f"{mylocalpath}\\positions_verify\\" + ppositionfilename + ".json")
     
     pchessgame.display_when_n_plies_gt = n_plies - 2
-    pchessgame.presort_when_n_plies_gt = 6
+    pchessgame.presort_when_n_plies_gt = 5
 
     print(datetime.now())
     print(f"Running evaluation {n_plies} plies {ppositionfilename} ...")
@@ -36,9 +36,9 @@ def FEN2Json(pchessgame, pgamefilename, ppositionfilename, pfen):
 mylocalpath = "C:\\Users\\Evert Jan\\pythonprojects\\chesspython_nogithub"
 mychessgame = chessgame(mylocalpath)
 
-#SwapPosition(mychessgame, "maingame", "08A_stalemate_2_white")
+#SwapPosition(mychessgame, "maingame", "mate_in_5_for_white_morepieces")
 #Json2FEN(mychessgame, "maingame", "mate_03_reversed")
-#FEN2Json(mychessgame, "maingame", "mate_3_black_hard", "r1b2rk1/pppp1ppp/8/2b1p3/2B1P1nq/2N2N2/PPP2PPP/R1BQR1K1 b")
+#FEN2Json(mychessgame, "maingame", "mate_3_black_lichess_01", "Bn2r1k1/p4ppp/3Q4/2p3q1/8/2N4n/PPPP1P1P/R1B2R1K b")
 #Json2FEN(mychessgame, "maingame", "loadedfromfen")
 
-Test(mychessgame, "maingame", "mate_3_black_hard", 6)
+Test(mychessgame, "maingame", "mate_in_5_for_black_morepieces", 10)

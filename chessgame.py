@@ -166,6 +166,8 @@ class chessgame:
         #y = chessmove idx relative to movelist
         #z = boolean Yes if opponent's King in check else No
 
+        self.positionstack[posidx].LocateKingsRooks(self.piecetypes)
+
         evalresult = self.positionstack[posidx].StaticEvaluation(self.piecetypes)
 
         if evalresult in (-100.0, 100.0):

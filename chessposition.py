@@ -19,7 +19,11 @@ class chessposition:
         self.SquaresAttackedByPM = [] #list of squares as tuples (i,j) that the player to move is attacking
         self.SquaresAttackedByPO = [] #list of squares as tuples (i,j) that the opponent is attacking
         self.whitekingcoord = (-1, -1)
+        self.whitekingsiderookcoord = (-1, -1)
+        self.whitequeensiderookcoord = (-1, -1)
         self.blackkingcoord = (-1, -1)
+        self.blackkingsiderookcoord = (-1, -1)
+        self.blackqueensiderookcoord = (-1, -1)
         self.movelist_allocated = 500
         self.movelist_totalfound = 0
         self.movelist = []
@@ -29,7 +33,11 @@ class chessposition:
         self.SquaresAttackedByPM.clear()
         self.SquaresAttackedByPO.clear()
         self.whitekingcoord = (-1, -1)
+        self.whitekingsiderookcoord = (-1, -1)
+        self.whitequeensiderookcoord = (-1, -1)
         self.blackkingcoord = (-1, -1)
+        self.blackkingsiderookcoord = (-1, -1)
+        self.blackqueensiderookcoord = (-1, -1)
         self.movelist_totalfound = 0
 #---------------------------------------------------------------------------------------------------------
     def ResetBoardsize(self, pboardwidth, pboardheight):
@@ -224,15 +232,6 @@ class chessposition:
         SquaresAttackedByPOdup = []
         for i in range(self.boardwidth):
             for j in range(self.boardheight):
-
-                if self.squares[j][i] != 0:
-                    pt = ppiecetypes[abs(self.squares[j][i]) - 1]
-                    if pt.name == "King" and pt.IsRoyal == True:
-                        if self.squares[j][i] > 0:
-                            self.whitekingcoord = (i, j)
-                        else:
-                            self.blackkingcoord = (i, j)
-
                 if ((self.squares[j][i] > 0 and self.colourtomove > 0) or
                     (self.squares[j][i] < 0 and self.colourtomove < 0)):
                     SquaresAttackedByPMdup.extend(self.GetStepLeapAttacks(i, j, ppiecetypes))
@@ -571,30 +570,38 @@ class chessposition:
             self.movelist[movei].IsCapture = True
             self.movelist_totalfound += 1
 #---------------------------------------------------------------------------------------------------------
-    def LocateKingRooks4Castling(self, ppiecetypes):
-        i_k = -1
-        i_qr = -1
-        i_kr = -1
-
-        if self.colourtomove == 1:
-            if self.whitekinghasmoved == True:
-                return i_k, i_qr, i_kr
-            j = 0
-        if self.colourtomove == -1:
-            if self.blackkinghasmoved == True:
-                return i_k, i_qr, i_kr
-            j = self.boardheight - 1
-
+    def LocateKingsRooks(self, ppiecetypes):
+        #If we go from left to right then we should find queensiderooks first
         for i in range(self.boardwidth):
-            pt = ppiecetypes[abs(self.squares[j][i]) - 1]
-            if (pt.name == "Rook" and self.squares[j][i] * self.colourtomove > 0):
-                if i_k == -1:
-                    i_qr = i
-                else:
-                    i_kr = i
-            elif (pt.name == "King" and pt.IsRoyal == True and self.squares[j][i] * self.colourtomove > 0):
-                i_k = i
-
+            for j in range(self.boardheight):
+                if self.squares[j][i] != 0:
+                    pt = ppiecetypes[abs(self.squares[j][i]) - 1]
+                    if pt.name == "King" and pt.IsRoyal == True:
+                        if self.squares[j][i] > 0:
+                            self.whitekingcoord = (i, j)
+                        else:
+                            self.blackkingcoord = (i, j)
+                    if pt.name == "Rook":
+                        if self.squares[j][i] > 0:
+                            if self.whitequeensiderookcoord == (-1, -1) and self.whitekingcoord == (-1, -1):
+                                self.whitequeensiderookcoord = (i, j)
+                            else:
+                                self.whitekingsiderookcoord = (i, j)
+                        else:
+                            if self.blackqueensiderookcoord == (-1, -1) and self.blackkingcoord == (-1, -1):
+                                self.blackqueensiderookcoord = (i, j)
+                            else:
+                                self.blackkingsiderookcoord = (i, j)
+#---------------------------------------------------------------------------------------------------------
+    def LocateKingRooks4Castling(self, ppiecetypes):
+        if self.colourtomove == 1:
+            i_k = self.whitekingcoord[0]
+            i_qr = self.whitequeensiderookcoord[0]
+            i_kr = self.whitekingsiderookcoord[0]
+        elif self.colourtomove == -1:
+            i_k = self.blackkingcoord[0]
+            i_qr = self.blackqueensiderookcoord[0]
+            i_kr = self.blackkingsiderookcoord[0]
         return i_k, i_qr, i_kr
 #---------------------------------------------------------------------------------------------------------
     def GetCastling(self, ppiecetypes):
@@ -679,11 +686,6 @@ class chessposition:
     def StaticEvaluation(self, ppiecetypes):
         materialbalance = 0.0
         myresult = 0.0
-        #Locate white and black King:
-        i_kw = -1
-        j_kw = -1
-        i_kb = -1
-        j_kb = -1
 
         for j in range(self.boardheight -1,-1,-1):
             for i in range(self.boardheight):
@@ -693,24 +695,22 @@ class chessposition:
 
                     if self.squares[j][i] > 0:
                         if pt.name == "King" and pt.IsRoyal == True:
-                            i_kw = i
-                            j_kw = j
+                            pass
                         else:
                             materialbalance += chesshelp.chesshelp.PieceType2Value(pi, ppiecetypes)
                     else:
                         if pt.name == "King" and pt.IsRoyal == True:
-                            i_kb = i
-                            j_kb = j
+                            pass
                         else:
                             materialbalance -= chesshelp.chesshelp.PieceType2Value(pi, ppiecetypes)
 
-        if i_kw == -1 and i_kb == -1:
+        if self.whitekingcoord[0] == -1 and self.blackkingcoord[0] == -1:
             myresult = -100.0 * self.colourtomove
             return myresult
-        if i_kw == -1:
+        if self.whitekingcoord[0] == -1:
             myresult = -100.0
             return myresult
-        if i_kb == -1:
+        if self.blackkingcoord[0] == -1:
             myresult = 100.0
             return myresult
         if materialbalance > 8:

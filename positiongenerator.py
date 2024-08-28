@@ -1,7 +1,6 @@
 from chessgame import chessgame
 from datetime import datetime
 import random
-import numpy as np
 
 def ClearBoard(pposition, pboardwidth, pboardheight):
     for i in range(pboardwidth):
@@ -29,6 +28,32 @@ def TuneCastlingInfo(pposition, ppiecetypes):
     pposition.blackkinghasmoved = True
     pposition.blackkingsiderookhasmoved = True
     pposition.blackqueensiderookhasmoved = True
+
+def CreateOneRandomFIDEEndGame(pposition, ppiecetypes, pboardwidth, pboardheight):
+
+    mycolourtomove = random.randint(-1, 1)
+    while mycolourtomove == 0:
+        mycolourtomove = random.randint(-1, 1)
+    pposition.colourtomove = mycolourtomove
+
+    #Pawns
+    for i in range(4):
+        PutPiece(pposition, 2 * i, 2 * i + 1, 1, 5, 3, 1)
+        PutPiece(pposition, 2 * i, 2 * i + 1, 2, 6, 3, -1)
+
+    #King
+    PutPiece(pposition, 0, 7, 0, 4, 1, 1)
+    PutPiece(pposition, 0, 7, 3, 7, 1, -1)
+    #Bishop
+    PutPiece(pposition, 0, 7, 0, 7, 0, 1)
+    PutPiece(pposition, 0, 7, 0, 7, 0, -1)
+    #Knight
+    PutPiece(pposition, 0, 7, 0, 7, 2, 1)
+    PutPiece(pposition, 0, 7, 0, 7, 2, -1)
+    #Rook
+    PutPiece(pposition, 0, 7, 0, 7, 5, 1)
+    PutPiece(pposition, 0, 7, 0, 7, 5, -1)
+
 
 def CreateOneRandomPosition(pposition, ppiecetypes, pboardwidth, pboardheight):
     minpawns = 4
@@ -89,6 +114,10 @@ def CreateHunterEndgame(pposition, ppiecetypes, pboardwidth, pboardheight):
             PutPiece(pposition, 0, 7, 0, 7, i, 1)
 
 def CreateRandom_main():
+
+    mychessgame.LoadFromJsonFile(".\\games\\setup01.json", f"{mylocalpath}\\positions\\empty8x8.json")
+    mychessgame.SaveAsJsonFile(f"{mylocalpath}\\games_verify\\setup01.json", f"{mylocalpath}\\positions_verify\\empty8x8.json")
+
     myval = 100.0
     while myval >= 100.0 or myval <= -100.0:
         ClearBoard(mychessgame.mainposition, mychessgame.mainposition.boardwidth, mychessgame.mainposition.boardheight)
@@ -112,6 +141,10 @@ def CreateRandom_main():
     print(f"Result of evaluation : {myval} {mymvstr}")
 
 def CreateHunter_main():
+
+    mychessgame.LoadFromJsonFile(".\\games\\setup01.json", f"{mylocalpath}\\positions\\empty8x8.json")
+    mychessgame.SaveAsJsonFile(f"{mylocalpath}\\games_verify\\setup01.json", f"{mylocalpath}\\positions_verify\\empty8x8.json")
+
     random.seed()
     myval = 100.0
     myval2 = 50.0
@@ -125,12 +158,11 @@ def CreateHunter_main():
             ClearBoard(mychessgame.mainposition, mychessgame.mainposition.boardwidth, mychessgame.mainposition.boardheight)
             CreateHunterEndgame(mychessgame.mainposition, mychessgame.piecetypes, mychessgame.mainposition.boardwidth, mychessgame.mainposition.boardheight)
             TuneCastlingInfo(mychessgame.mainposition, mychessgame.piecetypes)
-            myval, movei, _ = mychessgame.Calculation_n_plies(3)
+            myval, movei, _ = mychessgame.Calculation_n_plies(8)
             mycounter += 1
-            if mycounter % 100000 == 0:
+            if mycounter % 1000 == 0:
                 a = mychessgame.mainposition.PositionAsFEN(mychessgame.piecetypes)
                 print(f"Still phase 1 {mycounter} {myval} {datetime.now()} FEN = {a}")
-
 
         print(myval)
 
@@ -144,7 +176,7 @@ def CreateHunter_main():
         mychessgame.SaveAsJsonFile(f"{mylocalpath}\\games_verify\\setup01.json", f"{mylocalpath}\\positions_verify\\huntermate_{myseq}.json")
 
         print(f"Starting deeper calculation on this one {datetime.now()}")
-        myval2, movei, _ = mychessgame.Calculation_n_plies(8)
+        myval2, movei, _ = mychessgame.Calculation_n_plies(10)
         try:
             mymvstr = mychessgame.mainposition.movelist[movei].ShortNotation(mychessgame.piecetypes)
         except:
@@ -152,10 +184,31 @@ def CreateHunter_main():
         print(f"Result of evaluation : {myval2} {mymvstr}")
         print(f"Ended the deeper calculation {datetime.now()}")
 
+
+def CreateFIDEEndGame_main():
+    myseq = 0
+    n_plies = 7
+
+    mychessgame.LoadFromJsonFile(".\\games\\fide.json", f"{mylocalpath}\\positions\\empty8x8.json")
+    mychessgame.SaveAsJsonFile(f"{mylocalpath}\\games_verify\\setup01.json", f"{mylocalpath}\\positions_verify\\empty8x8.json")
+    random.seed()
+
+    myval = 100.0
+    while myval >= 20.0 or myval <= -20.0:
+        ClearBoard(mychessgame.mainposition, mychessgame.mainposition.boardwidth, mychessgame.mainposition.boardheight)
+        CreateOneRandomFIDEEndGame(mychessgame.mainposition, mychessgame.piecetypes, mychessgame.mainposition.boardwidth, mychessgame.mainposition.boardheight)
+        TuneCastlingInfo(mychessgame.mainposition, mychessgame.piecetypes)
+        print(f"Starting {n_plies} plies {datetime.now()}")
+        myval, _, _ = mychessgame.Calculation_n_plies(n_plies)
+        print(f"Ended {n_plies} plies {myval} {datetime.now()}")
+
+    mychessgame.SaveAsJsonFile(f"{mylocalpath}\\games_verify\\setup01.json", f"{mylocalpath}\\positions_verify\\fideendgame_{myseq}.json")
+    a = mychessgame.mainposition.PositionAsFEN(mychessgame.piecetypes)
+    print(a)
+
+
 mylocalpath = "C:\\Users\\Evert Jan\\pythonprojects\\chesspython_nogithub"
 mychessgame = chessgame(mylocalpath)
 
-mychessgame.LoadFromJsonFile(".\\games\\setup01.json", f"{mylocalpath}\\positions\\empty8x8.json")
-mychessgame.SaveAsJsonFile(f"{mylocalpath}\\games_verify\\setup01.json", f"{mylocalpath}\\positions_verify\\empty8x8.json")
 
-CreateHunter_main()
+CreateFIDEEndGame_main()
