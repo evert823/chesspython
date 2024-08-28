@@ -684,6 +684,16 @@ class chessposition:
             self.movelist_totalfound += 1
 #---------------------------------------------------------------------------------------------------------
     def StaticEvaluation(self, ppiecetypes):
+        if self.whitekingcoord[0] == -1 and self.blackkingcoord[0] == -1:
+            myresult = -100.0 * self.colourtomove
+            return myresult
+        if self.whitekingcoord[0] == -1:
+            myresult = -100.0
+            return myresult
+        if self.blackkingcoord[0] == -1:
+            myresult = 100.0
+            return myresult
+
         materialbalance = 0.0
         myresult = 0.0
 
@@ -704,15 +714,6 @@ class chessposition:
                         else:
                             materialbalance -= chesshelp.chesshelp.PieceType2Value(pi, ppiecetypes)
 
-        if self.whitekingcoord[0] == -1 and self.blackkingcoord[0] == -1:
-            myresult = -100.0 * self.colourtomove
-            return myresult
-        if self.whitekingcoord[0] == -1:
-            myresult = -100.0
-            return myresult
-        if self.blackkingcoord[0] == -1:
-            myresult = 100.0
-            return myresult
         if materialbalance > 8:
             myresult = 80.0
             return myresult

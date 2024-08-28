@@ -28,21 +28,6 @@ class chessmove:
         if self.IsEnPassant == True:
             s += " e.p."
         return s
-    def JsonString(self, ppiecetypes):
-        s = chesshelp.chesshelp.PieceType2Str(self.MovingPiece, ppiecetypes) + " "
-        s += f"({self.coordinates[0]}, {self.coordinates[1]}, {self.coordinates[2]}, {self.coordinates[3]}) "
-        if self.IsEnPassant == True:
-            s += "e.p. "
-        if self.IsCastling == True:
-            s += self.ShortNotation(ppiecetypes) + " "
-        if self.IsCapture == True:
-            s += "capture "
-        if self.othercoordinates != (-1, -1, -1, -1):
-            s += f"other coordinates ({self.othercoordinates[0]}, {self.othercoordinates[1]}, {self.othercoordinates[2]}, {self.othercoordinates[3]})"
-        if self.PromoteToPiece != 0:
-            s += " " + chesshelp.chesshelp.PieceType2Str(self.PromoteToPiece, ppiecetypes)
-    
-        return s
 
     def Coord2Squarename(self, pi, pj):
         myalphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
