@@ -11,6 +11,9 @@ def Test(pchessgame, pgamefilename, ppositionfilename, n_plies):
     print(datetime.now())
     print(f"Running evaluation {n_plies} plies {ppositionfilename} ...")
     myval, mymvidx, _ = pchessgame.Calculation_n_plies(n_plies)
+    s = f"List : {pchessgame.mainposition.DisplayMovelist(pchessgame.piecetypes)}"
+    print(s)
+
     try:
         mymvstr = pchessgame.mainposition.movelist[mymvidx].ShortNotation(pchessgame.piecetypes)
     except:
@@ -41,4 +44,4 @@ mychessgame = chessgame(mylocalpath)
 #FEN2Json(mychessgame, "maingame", "mate_3_black_lichess_01", "Bn2r1k1/p4ppp/3Q4/2p3q1/8/2N4n/PPPP1P1P/R1B2R1K b")
 #Json2FEN(mychessgame, "maingame", "loadedfromfen")
 
-Test(mychessgame, "maingame", "mate_in_5_for_black_morepieces", 10)
+Test(mychessgame, "maingame", "testposition", 1)

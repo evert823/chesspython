@@ -609,10 +609,14 @@ class chessposition:
             if self.whitekinghasmoved == True:
                 return
             j = 0
+            if self.whitekingcoord[1] != j:
+                return
         if self.colourtomove == -1:
             if self.blackkinghasmoved == True:
                 return
             j = self.boardheight - 1
+            if self.blackkingcoord[1] != j:
+                return
 
 
         #Now locate King and Rooks
@@ -620,6 +624,15 @@ class chessposition:
 
         queensidepossible = True
         kingsidepossible = True
+
+        if self.colourtomove == 1 and self.whitequeensiderookcoord[1] != j:
+            queensidepossible = False
+        if self.colourtomove == -1 and self.blackqueensiderookcoord[1] != j:
+            queensidepossible = False
+        if self.colourtomove == 1 and self.whitekingsiderookcoord[1] != j:
+            kingsidepossible = False
+        if self.colourtomove == -1 and self.blackkingsiderookcoord[1] != j:
+            kingsidepossible = False
 
         if self.colourtomove == 1 and self.whitequeensiderookhasmoved == True:
             queensidepossible = False

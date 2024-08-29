@@ -219,6 +219,12 @@ class chessgame:
 
         subresults = []
 
+        bestmoveidx = -1
+        if self.positionstack[posidx].colourtomove == 1:
+            bestmovevalue = -120.0
+        else:
+            bestmovevalue = 120.0
+
         noescapecheck = True
         for i in range(self.positionstack[posidx].movelist_totalfound):
             if n_plies > self.display_when_n_plies_gt:
@@ -231,11 +237,17 @@ class chessgame:
             subresults.append((i, newvalue))
 
             if self.positionstack[posidx].colourtomove == 1:
+                if newvalue > bestmovevalue:
+                    bestmovevalue = newvalue
+                    bestmoveidx = i
                 if new_alpha < newvalue:
                     new_alpha = newvalue
                 if newvalue >= new_beta:
                     break
             else:
+                if newvalue < bestmovevalue:
+                    bestmovevalue = newvalue
+                    bestmoveidx = i
                 if new_beta > newvalue:
                     new_beta = newvalue
                 if newvalue <= new_alpha:
@@ -253,13 +265,7 @@ class chessgame:
             evalresult = 0.0
             return (evalresult, None, False)
 
-        if self.positionstack[posidx].colourtomove == 1:
-            res_sorted = sorted(subresults, key=lambda tup: tup[1], reverse=True)
-        else:
-            res_sorted = sorted(subresults, key=lambda tup: tup[1], reverse=False)
-
-        evalresult = res_sorted[0][1]
-        bestmoveidx = res_sorted[0][0]
+        evalresult = bestmovevalue
 
         return (evalresult, bestmoveidx, False)
 #---------------------------------------------------------------------------------------------------------
