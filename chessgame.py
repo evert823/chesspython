@@ -204,6 +204,7 @@ class chessgame:
             for i in range(len(movelist2)):
                 newposidx = self.ExecuteMove(posidx, movelist2[i])
                 newvalue, _, me_in_check = self.__Calculation_n_plies(newposidx, new_alpha, new_beta, self.presort_using_n_plies)
+                #self.writelog(f"Value during presort moveidx {i} movevalue {newvalue}")
                 subresults_presort.append((i, newvalue))
 
             if self.positionstack[posidx].colourtomove == 1:
