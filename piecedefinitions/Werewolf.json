@@ -1,0 +1,10 @@
+{
+    "symbol": "F",
+    "name": "Werewolf",
+    "IsRoyal": false,
+    "IsDivergent": true,
+    "stepleapmovevectors": [],
+    "slidemovevectors": [],
+    "stepleapcapturevectors": [],
+    "slidecapturevectors": []
+}

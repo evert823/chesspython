@@ -1,0 +1,10 @@
+{
+    "symbol": "D",
+    "name": "Witch",
+    "IsRoyal": false,
+    "IsDivergent": true,
+    "stepleapmovevectors": [],
+    "slidemovevectors": [],
+    "stepleapcapturevectors": [],
+    "slidecapturevectors": []
+}

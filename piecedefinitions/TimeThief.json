@@ -1,0 +1,10 @@
+{
+    "symbol": "T",
+    "name": "TimeThief",
+    "IsRoyal": false,
+    "IsDivergent": true,
+    "stepleapmovevectors": [],
+    "slidemovevectors": [],
+    "stepleapcapturevectors": [],
+    "slidecapturevectors": []
+}
