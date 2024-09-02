@@ -1,4 +1,3 @@
 {
-    "piecetypes": ["Angel", "Archbishop", "Bishop", "Chancellor", "Dwarf", "Guard", "Hunter", "Joker",
-    "King", "Knight", "Pawn", "Queen", "Rook", "TimeThief", "Werewolf", "Witch"]
+    "piecetypes": ["Bishop", "Guard", "King", "Knight", "Pawn", "Queen", "Rook", "Witch"]
 }
