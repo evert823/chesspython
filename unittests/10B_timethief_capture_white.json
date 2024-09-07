@@ -1,0 +1,50 @@
+{
+    "positionslast2prev": [
+    {"boardwidth": 10,
+    "boardheight": 8,
+    "precedingmove": {
+        "x_from": 0,
+        "y_from": 1,
+        "x_to": 5,
+        "y_to": 1
+    },
+    "colourtomove": 1,
+    "castlinginfo": {"whitekinghasmoved": false,
+                     "whitekingsiderookhasmoved": false,
+                     "whitequeensiderookhasmoved": true,
+                     "blackkinghasmoved": true,
+                     "blackkingsiderookhasmoved": true,
+                     "blackqueensiderookhasmoved": true},
+    "squares": [
+        " T| .| .| .| .|-K| .| .| .|-R",
+        " .| .| .| .| .| .| .| .| .| .",
+        " .| .| .| .| .| .| .| .| .| .",
+        " .| .| .| .| .| .| .| .| .| .",
+        " .| .| .| .|-N| .| .| .| .| .",
+        " .| .| .| .| .| .| .| .| .| .",
+        " .| .| .| .| .|-Q| .| .| .| .",
+        " .| .| .| .| .| .| K| B| .| ."
+   ]
+   },
+   {"boardwidth": 10,
+   "boardheight": 8,
+   "colourtomove": -1,
+   "castlinginfo": {"whitekinghasmoved": false,
+                    "whitekingsiderookhasmoved": false,
+                    "whitequeensiderookhasmoved": true,
+                    "blackkinghasmoved": true,
+                    "blackkingsiderookhasmoved": true,
+                    "blackqueensiderookhasmoved": true},
+   "squares": [
+    " T| .| .| .| .|-K| .| .| .|-R",
+    " .| .| .| .| .| .| .| .| .| .",
+    " .| .| .| .| .| .| .| .| .| .",
+    " .| .| .| .| .| .| .| .| .| .",
+    " .| .| .| .|-N| .| .| .| .| .",
+    " .| .| .| .| .| .| .| .| .| .",
+    "-Q| .| .| .| .| p| .| .| .| .",
+    " .| .| .| .| .| .| K| B| .| ."
+]
+  }
+]
+}
