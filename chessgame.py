@@ -135,7 +135,10 @@ class chessgame:
             io2 = pmove.othercoordinates[2]
             jo2 = pmove.othercoordinates[3]
             otherpiece = self.positionstack[newposidx].squares[jo1][io1]
-            self.positionstack[newposidx].squares[jo1][io1] = 0
+
+            if io1 != i2:
+                self.positionstack[newposidx].squares[jo1][io1] = 0
+
             self.positionstack[newposidx].squares[jo2][io2] = otherpiece
 
         if self.positionstack[posidx].colourtomove == 1:
