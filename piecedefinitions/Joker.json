@@ -1,7 +1,6 @@
 {
     "symbol": "J",
     "name": "Joker",
-    "IsRoyal": false,
     "IsDivergent": true,
     "stepleapmovevectors": [],
     "slidemovevectors": [],

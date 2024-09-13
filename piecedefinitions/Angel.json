@@ -1,7 +1,6 @@
 {
     "symbol": "L",
     "name": "Angel",
-    "IsRoyal": false,
     "IsDivergent": true,
     "stepleapmovevectors": [],
     "slidemovevectors": [],
