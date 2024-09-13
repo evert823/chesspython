@@ -1,0 +1,23 @@
+{
+    "boardwidth": 8,
+    "boardheight": 8,
+    "colourtomove": 1,
+    "precedingmove": {
+        "x_from": 3,
+        "y_from": 6,
+        "x_to": 3,
+        "y_to": 4
+      },
+      "WhiteJokerImitatesPieceName": "Pawn",
+      "BlackJokerImitatesPieceName": "Pawn",
+          "squares": [
+            " .| .| .| .| .| .| .|-K",
+            " .| .| .| .| .| .| .| .",
+            " .| .| .| .| .| .| .| .",
+            " .| .| .|-J| J| .| .| .",
+            " .| .| .| .| .| .| .| .",
+            " .| .| .| .| .| .| .| .",
+            " .| .| .| .| .| .| .| .",
+            " K| .| .| .| .| .| .| ."
+   ]
+}
