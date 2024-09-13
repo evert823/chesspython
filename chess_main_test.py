@@ -22,9 +22,15 @@ def Test(pchessgame, pgamefilename, ppositionfilename, n_plies):
     print(datetime.now())
 
 def SwapPosition(pchessgame, pgamefilename, ppositionfilename):
+    newname = ppositionfilename + "_reversed"
+    if ppositionfilename.find("white") > -1:
+        newname = ppositionfilename.replace("white", "black")
+    elif ppositionfilename.find("black") > -1:
+        newname = ppositionfilename.replace("black", "white")
+
     pchessgame.LoadFromJsonFile(".\\games\\" + pgamefilename + ".json", f"{mylocalpath}\\positions\\" + ppositionfilename + ".json")
     pchessgame.mainposition = pchessgame.SwapBlackWhite(pchessgame.mainposition)
-    pchessgame.SaveAsJsonFile(f"{mylocalpath}\\games_verify\\" + pgamefilename + ".json", f"{mylocalpath}\\positions\\" + ppositionfilename + "_reversed.json")
+    pchessgame.SaveAsJsonFile(f"{mylocalpath}\\games_verify\\" + pgamefilename + ".json", f"{mylocalpath}\\positions\\" + newname + ".json")
 
 def Json2FEN(pchessgame, pgamefilename, ppositionfilename):
     pchessgame.LoadFromJsonFile(".\\games\\" + pgamefilename + ".json", f"{mylocalpath}\\positions\\" + ppositionfilename + ".json")
@@ -39,8 +45,9 @@ def FEN2Json(pchessgame, pgamefilename, ppositionfilename, pfen):
 mylocalpath = "C:\\Users\\Evert Jan\\pythonprojects\\chesspython_nogithub"
 mychessgame = chessgame(mylocalpath)
 
-#SwapPosition(mychessgame, "maingame", "mate_in_4_for_white_hard_chesscom")
-Json2FEN(mychessgame, "maingame", "08A_stalemate_2_white")
+SwapPosition(mychessgame, "maingame", "mate_5_white_talkchesscom")
+SwapPosition(mychessgame, "maingame", "mate_7_white_talkchesscom")
+#Json2FEN(mychessgame, "maingame", "08A_stalemate_2_white")
 #Json2FEN(mychessgame, "maingame", "pf_comparison_black")
 #FEN2Json(mychessgame, "maingame", "testposition", "2k5/3p4/2p1pB2/N7/2K3B1/4N3/3R4/8 w - - 0 3")
 
