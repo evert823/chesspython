@@ -1,5 +1,6 @@
 {
     "presort_when_n_plies_gt": 4,
+    "setting_SearchForFastestMate": true,
     "presort_using_n_plies": 3,
-    "display_when_n_plies_gt": 11
+    "display_when_n_plies_gt": 7
 }
