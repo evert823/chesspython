@@ -487,7 +487,7 @@ class chessposition:
 
         if includepromote == True:
             for pi in range(len(ppiecetypes)):
-                if (ppiecetypes[pi].name not in ["Amazon", "King", pt1.name]) and ppiecetypes[pi].IsRoyal == False:
+                if (ppiecetypes[pi].name not in ["Amazon", "King", pt1.name]):
                     movei2 = self.movelist_totalfound
                     self.SynchronizeChessmove(self.movelist[movei], self.movelist[movei2])
                     if self.movelist[movei].MovingPiece < 0:
@@ -576,7 +576,7 @@ class chessposition:
             for j in range(self.boardheight):
                 if self.squares[j][i] != 0:
                     pt = ppiecetypes[abs(self.squares[j][i]) - 1]
-                    if pt.name == "King" and pt.IsRoyal == True:
+                    if pt.name == "King":
                         if self.squares[j][i] > 0:
                             self.whitekingcoord = (i, j)
                         else:
@@ -717,12 +717,12 @@ class chessposition:
                     pt = ppiecetypes[pi]
 
                     if self.squares[j][i] > 0:
-                        if pt.name == "King" and pt.IsRoyal == True:
+                        if pt.name == "King":
                             pass
                         else:
                             materialbalance += chesshelp.chesshelp.PieceType2Value(pi, ppiecetypes)
                     else:
-                        if pt.name == "King" and pt.IsRoyal == True:
+                        if pt.name == "King":
                             pass
                         else:
                             materialbalance -= chesshelp.chesshelp.PieceType2Value(pi, ppiecetypes)

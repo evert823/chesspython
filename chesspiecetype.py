@@ -4,7 +4,6 @@ class chesspiecetype:
     def __init__(self):
         self.symbol = ''
         self.name = ''
-        self.IsRoyal = False
         self.IsDivergent = False
         #Rule: if IsDivergent is false then capturevectors will be ignored, only movevectors will be looked at
         self.stepleapmovevectors = []
@@ -34,7 +33,6 @@ class chesspiecetype:
         piecefile.close()
         self.symbol = piecedict["symbol"]
         self.name = piecedict["name"]
-        self.IsRoyal = piecedict["IsRoyal"]
         self.IsDivergent = piecedict["IsDivergent"]
 
         self.stepleapmovevectors = self.VectorSetFromjson(piecedict["stepleapmovevectors"]).copy()
@@ -49,7 +47,6 @@ class chesspiecetype:
         piecedict = {}
         piecedict["symbol"] = self.symbol
         piecedict["name"] = self.name
-        piecedict["IsRoyal"] = self.IsRoyal
         piecedict["IsDivergent"] = self.IsDivergent
 
         piecedict["stepleapmovevectors"] = self.VectorSetTojson(self.stepleapmovevectors).copy()

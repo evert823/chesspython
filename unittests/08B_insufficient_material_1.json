@@ -1,0 +1,31 @@
+{
+  "boardwidth": 8,
+  "boardheight": 8,
+  "colourtomove": 1,
+  "precedingmove": {
+    "x_from": -1,
+    "y_from": -1,
+    "x_to": -1,
+    "y_to": -1
+  },
+  "castlinginfo": {
+    "whitekinghasmoved": true,
+    "whitekingsiderookhasmoved": true,
+    "whitequeensiderookhasmoved": true,
+    "blackkinghasmoved": true,
+    "blackkingsiderookhasmoved": true,
+    "blackqueensiderookhasmoved": true
+  },
+  "WhiteJokerImitatesPieceName": "",
+  "BlackJokerImitatesPieceName": "",
+  "squares": [
+    " .| .| .| .| .| .| .| .",
+    " .| .| .| .| .| .|-K| .",
+    " .| .| .| .| .| .| .| .",
+    " .| .| .| .| .| .| .| .",
+    " .| .| .| .| .| .| .| .",
+    " K| .| .| B| .| .| .| .",
+    " .| .| B| .| .| .| .| .",
+    " .| .| .| .| .| .| .| ."
+  ]
+}

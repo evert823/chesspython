@@ -45,7 +45,7 @@ def FEN2Json(pchessgame, pgamefilename, ppositionfilename, pfen):
 mylocalpath = "C:\\Users\\Evert Jan\\pythonprojects\\chesspython_nogithub"
 mychessgame = chessgame(mylocalpath)
 
-SwapPosition(mychessgame, "maingame", "mate_5_white_talkchesscom")
+SwapPosition(mychessgame, "maingame", "fromfen")
 SwapPosition(mychessgame, "maingame", "mate_7_white_talkchesscom")
 #Json2FEN(mychessgame, "maingame", "08A_stalemate_2_white")
 #Json2FEN(mychessgame, "maingame", "pf_comparison_black")

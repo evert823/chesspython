@@ -105,7 +105,7 @@ class chessgame:
         #Set castling info for new position BEGIN
         pt = self.piecetypes[abs(pmove.MovingPiece) - 1]
 
-        if pt.name == "King" and pt.IsRoyal == True:
+        if pt.name == "King":
             if self.positionstack[posidx].colourtomove == 1:
                 self.positionstack[newposidx].whitekinghasmoved = True
             else:
