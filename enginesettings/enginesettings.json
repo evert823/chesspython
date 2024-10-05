@@ -2,6 +2,6 @@
     "presort_when_depth_gt": 4,
     "setting_SearchForFastestMate": true,
     "presort_using_depth": 3,
-    "display_when_depth_gt": 8,
-    "use_transposition_table_when_depth_gt": 4
+    "display_when_depth_gt": 7,
+    "use_transposition_table_when_depth_gt": 2
 }
