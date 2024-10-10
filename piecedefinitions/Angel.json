@@ -2,6 +2,7 @@
     "symbol": "L",
     "name": "Angel",
     "IsDivergent": true,
+    "CheckDuplicateMoves": true,
     "stepleapmovevectors": [],
     "slidemovevectors": [],
     "stepleapcapturevectors": [],

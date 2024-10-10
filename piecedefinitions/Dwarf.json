@@ -2,6 +2,7 @@
     "symbol": "D",
     "name": "Dwarf",
     "IsDivergent": true,
+    "CheckDuplicateMoves": false,
     "stepleapmovevectors": [],
     "slidemovevectors": [],
     "stepleapcapturevectors": [],

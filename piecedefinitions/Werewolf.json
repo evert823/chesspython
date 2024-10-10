@@ -2,6 +2,7 @@
     "symbol": "F",
     "name": "Werewolf",
     "IsDivergent": true,
+    "CheckDuplicateMoves": true,
     "stepleapmovevectors": [],
     "slidemovevectors": [],
     "stepleapcapturevectors": [],

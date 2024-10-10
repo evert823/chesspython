@@ -3,5 +3,6 @@
     "setting_SearchForFastestMate": true,
     "presort_using_depth": 3,
     "display_when_depth_gt": 7,
-    "use_transposition_table_when_depth_gt": 2
+    "consult_tt_when_depth_gt": 3,
+    "store_in_tt_when_depth_gt": 4
 }

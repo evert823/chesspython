@@ -2,6 +2,7 @@
     "symbol": "J",
     "name": "Joker",
     "IsDivergent": true,
+    "CheckDuplicateMoves": false,
     "stepleapmovevectors": [],
     "slidemovevectors": [],
     "stepleapcapturevectors": [],
