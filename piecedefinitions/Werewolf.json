@@ -1,7 +1,7 @@
 {
-    "symbol": "F",
+    "symbol": "X",
     "name": "Werewolf",
-    "IsDivergent": true,
+    "IsDivergent": false,
     "CheckDuplicateMoves": true,
     "stepleapmovevectors": [],
     "slidemovevectors": [],
