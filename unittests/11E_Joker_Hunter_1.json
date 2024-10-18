@@ -8,8 +8,8 @@
         "x_to":-1,
         "y_to":-1
       },
-      "WhiteJokerImitatesPieceName": "",
-      "BlackJokerImitatesPieceName": "King",
+      "WhiteJokerImitatesPieceName": "King",
+      "BlackJokerImitatesPieceName": "",
           "squares": [
             " .| .| .| .| .| .| .| .",
             " .| .| .| .| H| .| .|-K",

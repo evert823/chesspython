@@ -1,0 +1,17 @@
+{
+    "boardwidth": 8,
+    "boardheight": 8,
+    "colourtomove": 1,
+    "WhiteElfMoveType": "Capture",
+    "BlackElfMoveType": "other",
+        "squares": [
+        " .| .| .|-K| .| .| .| .",
+        " .| .| .| .| .|-G| .| .",
+        " .| .| .| .| .| .| .| .",
+        "-N| .| .| .| .| .| .| .",
+        " .| .| .| .| .| .| .| .",
+        " .| E| .| .| .| .| .| .",
+        " .| .| .| .| .| .| .| .",
+        " .| .| .| .| K| .| .| ."
+]
+}
