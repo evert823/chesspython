@@ -2,7 +2,7 @@
     "presort_when_depth_gt": 4,
     "setting_SearchForFastestMate": true,
     "presort_using_depth": 3,
-    "display_when_depth_gt": 7,
-    "consult_tt_when_depth_gt": 3,
-    "store_in_tt_when_depth_gt": 4
+    "display_when_depth_gt": 6,
+    "consult_tt_when_depth_gt": 4,
+    "store_in_tt_when_depth_gt": 5
 }
