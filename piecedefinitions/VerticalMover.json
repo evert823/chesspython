@@ -3,6 +3,7 @@
     "name": "VerticalMover",
     "IsDivergent": false,
     "CheckDuplicateMoves": false,
+    "EstimatedValue": 3.5,
     "stepleapmovevectors": [{"x": 1, "y": 0}, {"x": -1, "y": 0}],
     "slidemovevectors": [{"x": 0, "y": 1}, {"x": 0, "y": -1}]
 }

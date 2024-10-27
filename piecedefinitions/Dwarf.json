@@ -3,6 +3,7 @@
     "name": "Dwarf",
     "IsDivergent": true,
     "CheckDuplicateMoves": false,
+    "EstimatedValue": 12.0,
     "stepleapmovevectors": [],
     "slidemovevectors": [],
     "stepleapcapturevectors": [],
