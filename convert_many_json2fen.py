@@ -8,7 +8,7 @@ def GetFiles(mypath):
 
 def ConvertAll(pchessgame, piecefilelist):
     for f in piecefilelist:
-        if f.find("frompositiongenerator") > -1:
+        if f.find("random_mate_") > -1:
             #print(f"{mylocalpath}\\randompositions\\{f}.json")
             pchessgame.LoadFromJsonFile(".\\games\\maingame.json", f"{mylocalpath}\\randompositions\\{f}")
             a = pchessgame.mainposition.PositionAsFEN(pchessgame.piecetypes)
