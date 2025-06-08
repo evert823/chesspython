@@ -1,0 +1,12 @@
+{
+    "symbol": "Q3",
+    "name": "Queen3",
+    "IsDivergent": false,
+    "CheckDuplicateMoves": true,
+    "EstimatedValue": 8.3,
+    "stepleapmovevectors": [],
+    "slidemovevectors": [{"x": 0, "y": 1, "maxrange": 3}, {"x": 1, "y": 1, "maxrange": 3}, {"x": 1, "y": 0, "maxrange": 3}, {"x": 1, "y": -1, "maxrange": 3},
+                         {"x": 0, "y": -1, "maxrange": 3}, {"x": -1, "y": -1, "maxrange": 3}, {"x": -1, "y": 0, "maxrange": 3}, {"x": -1, "y": 1, "maxrange": 3}],
+    "stepleapcapturevectors": [],
+    "slidecapturevectors": []
+}
