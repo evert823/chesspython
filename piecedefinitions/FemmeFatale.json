@@ -4,13 +4,127 @@
     "IsDivergent": true,
     "CheckDuplicateMoves": false,
     "EstimatedValue": 7.1,
-    "stepleapmovevectors": [{"x": 1, "y": 2}, {"x": 2, "y": 1}, {"x": 2, "y": -1}, {"x": 1, "y": -2},
-                          {"x": -1, "y": -2}, {"x": -2, "y": -1}, {"x": -2, "y": 1}, {"x": -1, "y": 2},
-                          {"x": 0, "y": 2}, {"x": 2, "y": 2}, {"x": 2, "y": 0}, {"x": 2, "y": -2},
-                          {"x": 0, "y": -2}, {"x": -2, "y": -2}, {"x": -2, "y": 0}, {"x": -2, "y": 2},
-                          {"x": 0, "y": 1}, {"x": 1, "y": 1}, {"x": 1, "y": 0}, {"x": 1, "y": -1},
-                          {"x": 0, "y": -1}, {"x": -1, "y": -1}, {"x": -1, "y": 0}, {"x": -1, "y": 1}],
-    "slidemovevectors": [],
-    "stepleapcapturevectors": [],
+    "slidemovevectors": [
+        {
+            "x": 1,
+            "y": 2,
+            "maxrange": 1
+        },
+        {
+            "x": 2,
+            "y": 1,
+            "maxrange": 1
+        },
+        {
+            "x": 2,
+            "y": -1,
+            "maxrange": 1
+        },
+        {
+            "x": 1,
+            "y": -2,
+            "maxrange": 1
+        },
+        {
+            "x": -1,
+            "y": -2,
+            "maxrange": 1
+        },
+        {
+            "x": -2,
+            "y": -1,
+            "maxrange": 1
+        },
+        {
+            "x": -2,
+            "y": 1,
+            "maxrange": 1
+        },
+        {
+            "x": -1,
+            "y": 2,
+            "maxrange": 1
+        },
+        {
+            "x": 0,
+            "y": 2,
+            "maxrange": 1
+        },
+        {
+            "x": 2,
+            "y": 2,
+            "maxrange": 1
+        },
+        {
+            "x": 2,
+            "y": 0,
+            "maxrange": 1
+        },
+        {
+            "x": 2,
+            "y": -2,
+            "maxrange": 1
+        },
+        {
+            "x": 0,
+            "y": -2,
+            "maxrange": 1
+        },
+        {
+            "x": -2,
+            "y": -2,
+            "maxrange": 1
+        },
+        {
+            "x": -2,
+            "y": 0,
+            "maxrange": 1
+        },
+        {
+            "x": -2,
+            "y": 2,
+            "maxrange": 1
+        },
+        {
+            "x": 0,
+            "y": 1,
+            "maxrange": 1
+        },
+        {
+            "x": 1,
+            "y": 1,
+            "maxrange": 1
+        },
+        {
+            "x": 1,
+            "y": 0,
+            "maxrange": 1
+        },
+        {
+            "x": 1,
+            "y": -1,
+            "maxrange": 1
+        },
+        {
+            "x": 0,
+            "y": -1,
+            "maxrange": 1
+        },
+        {
+            "x": -1,
+            "y": -1,
+            "maxrange": 1
+        },
+        {
+            "x": -1,
+            "y": 0,
+            "maxrange": 1
+        },
+        {
+            "x": -1,
+            "y": 1,
+            "maxrange": 1
+        }
+    ],
     "slidecapturevectors": []
 }

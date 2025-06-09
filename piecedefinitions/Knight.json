@@ -4,7 +4,46 @@
     "IsDivergent": false,
     "CheckDuplicateMoves": false,
     "EstimatedValue": 3.0,
-    "stepleapmovevectors": [{"x": 1, "y": 2}, {"x": 2, "y": 1}, {"x": 2, "y": -1}, {"x": 1, "y": -2},
-                          {"x": -1, "y": -2}, {"x": -2, "y": -1}, {"x": -2, "y": 1}, {"x": -1, "y": 2}],
-    "slidemovevectors": []
+    "slidemovevectors": [
+        {
+            "x": 1,
+            "y": 2,
+            "maxrange": 1
+        },
+        {
+            "x": 2,
+            "y": 1,
+            "maxrange": 1
+        },
+        {
+            "x": 2,
+            "y": -1,
+            "maxrange": 1
+        },
+        {
+            "x": 1,
+            "y": -2,
+            "maxrange": 1
+        },
+        {
+            "x": -1,
+            "y": -2,
+            "maxrange": 1
+        },
+        {
+            "x": -2,
+            "y": -1,
+            "maxrange": 1
+        },
+        {
+            "x": -2,
+            "y": 1,
+            "maxrange": 1
+        },
+        {
+            "x": -1,
+            "y": 2,
+            "maxrange": 1
+        }
+    ]
 }

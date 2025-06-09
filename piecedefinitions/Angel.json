@@ -4,8 +4,6 @@
     "IsDivergent": true,
     "CheckDuplicateMoves": true,
     "EstimatedValue": 5,
-    "stepleapmovevectors": [],
     "slidemovevectors": [],
-    "stepleapcapturevectors": [],
     "slidecapturevectors": []
 }

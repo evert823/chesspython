@@ -6,6 +6,8 @@ class chesspiecetype:
         self.name = ''
         self.IsDivergent = False
         #Rule: if IsDivergent is false then capturevectors will be ignored, only movevectors will be looked at
+        self.CheckDuplicateMoves = False
+        self.EstimatedValue = 0.0
         self.stepleapmovevectors = []
         self.slidemovevectors = []
         self.stepleapcapturevectors = []
@@ -14,7 +16,13 @@ class chesspiecetype:
     def VectorSetFromjson(self, mydict):
         myresult = []
         for v in mydict:
-            myresult.append((v["x"], v["y"]))
+            myx = v["x"]
+            myy = v["y"]
+            try:
+                mymaxrange = v["maxrange"]
+            except:
+                mymaxrange = 0
+            myresult.append((myx, myy, mymaxrange))
         return myresult
 #---------------------------------------------------------------------------------------------------------
     def VectorSetTojson(self, myset):
@@ -23,6 +31,7 @@ class chesspiecetype:
             vectordict = {}
             vectordict["x"] = v[0]
             vectordict["y"] = v[1]
+            vectordict["maxrange"] = v[2]
             myresult.append(vectordict)
         return myresult
 #---------------------------------------------------------------------------------------------------------
@@ -34,6 +43,8 @@ class chesspiecetype:
         self.symbol = piecedict["symbol"]
         self.name = piecedict["name"]
         self.IsDivergent = piecedict["IsDivergent"]
+        self.CheckDuplicateMoves = piecedict["CheckDuplicateMoves"]
+        self.EstimatedValue = piecedict["EstimatedValue"]
 
         self.stepleapmovevectors = self.VectorSetFromjson(piecedict["stepleapmovevectors"]).copy()
         self.slidemovevectors = self.VectorSetFromjson(piecedict["slidemovevectors"]).copy()
@@ -48,11 +59,13 @@ class chesspiecetype:
         piecedict["symbol"] = self.symbol
         piecedict["name"] = self.name
         piecedict["IsDivergent"] = self.IsDivergent
+        piecedict["CheckDuplicateMoves"] = self.CheckDuplicateMoves
+        piecedict["EstimatedValue"] = self.EstimatedValue
 
-        piecedict["stepleapmovevectors"] = self.VectorSetTojson(self.stepleapmovevectors).copy()
+        #piecedict["stepleapmovevectors"] = self.VectorSetTojson(self.stepleapmovevectors).copy()
         piecedict["slidemovevectors"] = self.VectorSetTojson(self.slidemovevectors).copy()
         if self.IsDivergent == True:
-            piecedict["stepleapcapturevectors"] = self.VectorSetTojson(self.stepleapcapturevectors).copy()
+            #piecedict["stepleapcapturevectors"] = self.VectorSetTojson(self.stepleapcapturevectors).copy()
             piecedict["slidecapturevectors"] = self.VectorSetTojson(self.slidecapturevectors).copy()
 
         json.dump(piecedict, piecefile, indent=4)
