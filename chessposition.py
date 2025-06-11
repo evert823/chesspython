@@ -124,7 +124,7 @@ class chessposition:
             myvisualrank = ""
             for i in range(self.boardwidth):
                 mysymbol = chesshelp.chesshelp.PieceType2Str(self.squares[rj][i], ppiecetypes)
-                while len(mysymbol) < 2:
+                while len(mysymbol) < 3:
                     mysymbol = " " + mysymbol
                 myvisualrank += mysymbol
                 if i < self.boardwidth - 1:

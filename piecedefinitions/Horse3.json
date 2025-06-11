@@ -1,0 +1,57 @@
+{
+    "symbol": "X3",
+    "name": "Horse3",
+    "IsDivergent": false,
+    "CheckDuplicateMoves": false,
+    "EstimatedValue": 2.3,
+    "slidemovevectors": [
+        {
+            "x": 1,
+            "y": 2,
+            "maxrange": 3,
+            "ifvacant": [{"x": 0, "y": 1}]
+        },
+        {
+            "x": 2,
+            "y": 1,
+            "maxrange": 3,
+            "ifvacant": [{"x": 1, "y": 0}]
+        },
+        {
+            "x": 2,
+            "y": -1,
+            "maxrange": 3,
+            "ifvacant": [{"x": 1, "y": 0}]
+        },
+        {
+            "x": 1,
+            "y": -2,
+            "maxrange": 3,
+            "ifvacant": [{"x": 0, "y": -1}]
+        },
+        {
+            "x": -1,
+            "y": -2,
+            "maxrange": 3,
+            "ifvacant": [{"x": 0, "y": -1}]
+        },
+        {
+            "x": -2,
+            "y": -1,
+            "maxrange": 3,
+            "ifvacant": [{"x": -1, "y": 0}]
+        },
+        {
+            "x": -2,
+            "y": 1,
+            "maxrange": 3,
+            "ifvacant": [{"x": -1, "y": 0}]
+        },
+        {
+            "x": -1,
+            "y": 2,
+            "maxrange": 3,
+            "ifvacant": [{"x": 0, "y": 1}]
+        }
+    ]
+}

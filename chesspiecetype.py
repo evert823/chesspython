@@ -46,10 +46,10 @@ class chesspiecetype:
         self.CheckDuplicateMoves = piecedict["CheckDuplicateMoves"]
         self.EstimatedValue = piecedict["EstimatedValue"]
 
-        self.stepleapmovevectors = self.VectorSetFromjson(piecedict["stepleapmovevectors"]).copy()
+        #self.stepleapmovevectors = self.VectorSetFromjson(piecedict["stepleapmovevectors"]).copy()
         self.slidemovevectors = self.VectorSetFromjson(piecedict["slidemovevectors"]).copy()
         if self.IsDivergent == True:
-            self.stepleapcapturevectors = self.VectorSetFromjson(piecedict["stepleapcapturevectors"]).copy()
+            #self.stepleapcapturevectors = self.VectorSetFromjson(piecedict["stepleapcapturevectors"]).copy()
             self.slidecapturevectors = self.VectorSetFromjson(piecedict["slidecapturevectors"]).copy()
 #---------------------------------------------------------------------------------------------------------
     def SaveAsJsonFile(self, pfilename):
