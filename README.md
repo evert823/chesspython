@@ -1,3 +1,3 @@
-- Chess program in Python
-- At the moment, this repo and C# WeirdEngine (*) share json files that are part of this project
-- (*) https://github.com/evert823/TheWeirdEngine
+- Json and python common files to support other repos
+- PLS NOTE the python engine has moved to separate repo chesspythonengine
+- see https://github.com/evert823/TheWeirdEngine
