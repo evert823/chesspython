@@ -1,0 +1,49 @@
+{
+    "symbol": "Z",
+    "name": "Zebra",
+    "IsDivergent": false,
+    "CheckDuplicateMoves": false,
+    "EstimatedValue": 3.0,
+    "slidemovevectors": [
+        {
+            "x": 2,
+            "y": 3,
+            "maxrange": 1
+        },
+        {
+            "x": 3,
+            "y": 2,
+            "maxrange": 1
+        },
+        {
+            "x": 3,
+            "y": -2,
+            "maxrange": 1
+        },
+        {
+            "x": 2,
+            "y": -3,
+            "maxrange": 1
+        },
+        {
+            "x": -2,
+            "y": -3,
+            "maxrange": 1
+        },
+        {
+            "x": -3,
+            "y": -2,
+            "maxrange": 1
+        },
+        {
+            "x": -3,
+            "y": 2,
+            "maxrange": 1
+        },
+        {
+            "x": -2,
+            "y": 3,
+            "maxrange": 1
+        }
+    ]
+}
